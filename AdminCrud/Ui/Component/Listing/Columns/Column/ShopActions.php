@@ -4,8 +4,9 @@ namespace Elogic\AdminCrud\Ui\Component\Listing\Columns\Column;
 use Magento\Framework\UrlInterface;
 use Magento\Framework\View\Element\UiComponent\ContextInterface;
 use Magento\Framework\View\Element\UiComponentFactory;
+use Magento\Ui\Component\Listing\Columns\Column;
 
-class ShopActions extends \Magento\Ui\Component\Listing\Columns\Column
+class ShopActions extends Column
 {
     protected UrlInterface $urlBuilder;
 

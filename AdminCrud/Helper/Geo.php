@@ -34,8 +34,11 @@ class Geo
             '&key=' . $this->data->getApiKey() .
             '&sensor=false'
         );
+
         $output = json_decode($geocodeFromAddress);
-        $data = null;
+        var_dump($output->results[0]);
+
+        $data = ['latitude' => 0.000000, 'longitude' => 0.000000];
         if ($output->status == 'OK') {
             $data['latitude'] = $output->results[0]->geometry->location->lat;
             $data['longitude'] = $output->results[0]->geometry->location->lng;

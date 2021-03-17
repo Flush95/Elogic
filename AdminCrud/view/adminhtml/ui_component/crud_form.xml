@@ -148,25 +148,6 @@
                 </item>
             </argument>
         </field>
-
-        <!--<field name="img_url">
-            <argument name="data" xsi:type="array">
-                <item name="config" xsi:type="array">
-                    <item name="dataType" xsi:type="string">string</item>
-                    <item name="source" xsi:type="string">featured_image</item>
-                    <item name="label" xsi:type="string" translate="true">Featured Image</item>
-                    <item name="visible" xsi:type="boolean">true</item>
-                    <item name="formElement" xsi:type="string">fileUploader</item>
-                    <item name="previewTmpl" xsi:type="string">Magento_Catalog/image-preview</item>
-                    <item name="validation" xsi:type="array">
-                        <item name="required-entry" xsi:type="boolean">true</item>
-                    </item>
-                    <item name="uploaderConfig" xsi:type="array">
-                        <item name="url" xsi:type="url" path="admin_crud/imageUploader/upload"/>
-                    </item>
-                </item>
-            </argument>
-        </field>-->
         <field name="shop_city">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
@@ -180,7 +161,6 @@
             <settings>
                 <validation>
                     <rule name="required-entry" xsi:type="boolean">true</rule>
-                    <rule name="letters-with-basic-punc" xsi:type="boolean">true</rule>
                 </validation>
             </settings>
         </field>
@@ -230,7 +210,6 @@
             <settings>
                 <validation>
                     <rule name="required-entry" xsi:type="boolean">true</rule>
-                    <rule name="validate-street" xsi:type="boolean">true</rule>
                 </validation>
             </settings>
         </field>

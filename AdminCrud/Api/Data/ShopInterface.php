@@ -1,23 +1,22 @@
 <?php
 declare(strict_types=1);
-namespace Elogic\StoreLocator\Api\Data;
+namespace Elogic\AdminCrud\Api\Data;
 
 use Magento\Framework\Api\ExtensibleDataInterface;
 
 interface ShopInterface extends ExtensibleDataInterface
 {
+
     /**
-     * Get shop_id
-     * @return int
+     * @return mixed
      */
     public function getShopId();
 
     /**
-     * Get shop_id
-     * @param int $id
-     * @return $this
+     * @param int|null $id
+     * @return ShopInterface
      */
-    public function setShopId(int $id): ShopInterface;
+    public function setShopId(?int $id): ShopInterface;
 
     /**
      * Get shop_name
@@ -144,7 +143,7 @@ interface ShopInterface extends ExtensibleDataInterface
 
     /**
      * Set latitude
-     * @param float $latitude
+     * @param double $latitude
      * @return $this
      */
     public function setLatitude(float $latitude): ShopInterface;
@@ -157,7 +156,7 @@ interface ShopInterface extends ExtensibleDataInterface
 
     /**
      * Set longitude
-     * @param float $longitude
+     * @param double $longitude
      * @return $this
      */
     public function setLongitude(float $longitude): ShopInterface;

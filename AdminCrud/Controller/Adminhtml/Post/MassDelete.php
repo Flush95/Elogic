@@ -1,7 +1,7 @@
 <?php
 namespace Elogic\AdminCrud\Controller\Adminhtml\Post;
 
-use Elogic\AdminCrud\Model\ResourceModel\StoreModelCollections\CollectionFactory;
+use Elogic\AdminCrud\Model\ResourceModel\ShopCollections\CollectionFactory;
 use Magento\Backend\App\Action;
 use Magento\Backend\App\Action\Context;
 use Magento\Framework\App\ObjectManager;

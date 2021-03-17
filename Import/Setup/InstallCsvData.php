@@ -66,7 +66,6 @@ class InstallCsvData implements DataPatchInterface, PatchVersionInterface
         try {
             $connection->beginTransaction();
             $columns = [
-                'shop_id',
                 'shop_name',
                 'description',
                 'img_url',

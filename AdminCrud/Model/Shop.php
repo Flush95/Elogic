@@ -3,7 +3,7 @@
 namespace Elogic\AdminCrud\Model;
 
 use Elogic\AdminCrud\Model\ResourceModel\ShopResource;
-use Elogic\StoreLocator\Api\Data\ShopInterface;
+use Elogic\AdminCrud\Api\Data\ShopInterface;
 use Magento\Framework\Model\AbstractModel;
 
 class Shop extends AbstractModel implements ShopInterface
@@ -28,11 +28,12 @@ class Shop extends AbstractModel implements ShopInterface
         return $this->getData('shop_id');
     }
 
+
     /**
-     * @param int $id
+     * @param int|null $id
      * @return ShopInterface
      */
-    public function setShopId(int $id): ShopInterface
+    public function setShopId(?int $id): ShopInterface
     {
         return $this->setData('shop_id', $id);
     }
@@ -193,16 +194,16 @@ class Shop extends AbstractModel implements ShopInterface
      */
     public function getLatitude(): float
     {
-        return $this->getData('latitude');
+        return (float) $this->getData('latitude');
     }
 
     /**
-     * @param float $latitude
+     * @param $latitude
      * @return ShopInterface
      */
-    public function setLatitude(float $latitude): ShopInterface
+    public function setLatitude($latitude): ShopInterface
     {
-        return $this->setData('latitude');
+        return $this->setData('latitude', $latitude);
     }
 
     /**
@@ -210,7 +211,7 @@ class Shop extends AbstractModel implements ShopInterface
      */
     public function getLongitude(): float
     {
-        return $this->getData('longitude');
+        return (float) $this->getData('longitude');
     }
 
     /**
@@ -219,7 +220,7 @@ class Shop extends AbstractModel implements ShopInterface
      */
     public function setLongitude(float $longitude): ShopInterface
     {
-        return $this->setData($longitude);
+        return $this->setData('longitude', $longitude);
     }
 
 }

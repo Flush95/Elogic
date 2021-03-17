@@ -2,11 +2,11 @@
     <type name="Magento\Framework\View\Element\UiComponent\DataProvider\CollectionFactory">
         <arguments>
             <argument name="collections" xsi:type="array">
-                <item name="elogic_admincrud_post_listing_data_source" xsi:type="string">Elogic\AdminCrud\Model\ResourceModel\StoreModelCollections\Collection</item>
+                <item name="elogic_admincrud_post_listing_data_source" xsi:type="string">Elogic\AdminCrud\Model\ResourceModel\ShopCollections\Collection</item>
             </argument>
         </arguments>
     </type>
-    <virtualType name="Elogic\AdminCrud\Model\ResourceModel\StoreModelCollections\Collection" type="Magento\Framework\View\Element\UiComponent\DataProvider\SearchResult">
+    <virtualType name="Elogic\AdminCrud\Model\ResourceModel\ShopCollections\Collection" type="Magento\Framework\View\Element\UiComponent\DataProvider\SearchResult">
         <arguments>
             <argument name="mainTable" xsi:type="string">elogic_shops</argument>
             <argument name="resourceModel" xsi:type="string">Elogic\AdminCrud\Model\ResourceModel\ShopResource</argument>

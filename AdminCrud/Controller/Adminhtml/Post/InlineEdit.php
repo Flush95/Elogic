@@ -10,7 +10,7 @@ use Psr\Log\LoggerInterface;
 /**
  * Class Index
  */
-class Update extends Action
+class InlineEdit extends Action
 {
 
     /**

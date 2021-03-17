@@ -4,9 +4,12 @@ namespace Elogic\AdminCrud\Controller\Adminhtml\Post;
 use Elogic\AdminCrud\Helper\Geo;
 use Elogic\AdminCrud\Model\ResourceModel\ShopResource;
 use Elogic\AdminCrud\Model\Shop;
+use Elogic\AdminCrud\Model\ShopFactory;
+use Elogic\AdminCrud\Model\ShopRepository;
+use Exception;
 use Magento\Backend\App\Action;
 use Magento\Backend\App\Action\Context;
-use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\AlreadyExistsException;
 use Magento\Framework\Filesystem\Driver\File;
 
@@ -29,12 +32,17 @@ class Save extends Action
      * @var Geo
      */
     private Geo $geo;
+    /**
+     * @var ShopFactory
+     */
+    private ShopFactory $factory;
 
     /**
      * Create constructor.
      * @param Context $context
      * @param ShopResource $resourceModel
      * @param Shop $shopModel
+     * @param ShopFactory $factory
      * @param File $file
      * @param Geo $geo
      */
@@ -43,47 +51,42 @@ class Save extends Action
         ShopResource $resourceModel,
         Shop $shopModel,
         File $file,
-        Geo $geo
+        Geo $geo,
+        ShopFactory $factory
     ) {
         parent::__construct($context);
         $this->resourceModel = $resourceModel;
         $this->shopModel = $shopModel;
         $this->file = $file;
         $this->geo = $geo;
+        $this->factory = $factory;
     }
 
     public function execute()
     {
         $data = $this->getRequest()->getParams();
+
+        $id = isset($data['shop_id']) ? intval($data['shop_id']) : null;
         unset($data['key']);
         unset($data['back']);
         unset($data['form_key']);
-
-        //$this->_eventManager->dispatch('coordinates', $data);
-
-
         $fileName = $data['img_url'][0]['name'];
         $data['img_url'] = $fileName;
 
-        if (empty($data['latitude'] && $data['longitude'])) {
-            $geolocation = $this->geo->getCoordinates($data['shop_state'] . '+' . $data['shop_city'] . '+' . $data['shop_address']);
-            $data['latitude'] = $geolocation['latitude'];
-            $data['longitude'] = $geolocation['longitude'];
+        $shopRepository = ObjectManager::getInstance()->get(ShopRepository::class);
+
+        $shop = $this->factory->create();
+        if ($id != null) {
+            $shop = $shopRepository->getShopById($id);
         }
+        $shop->setData($data);
 
         try {
-            $shopModel = $this->shopModel->setData($data);
-            $this->resourceModel->save($shopModel);
+            $this->resourceModel->save($shop);
             $this->messageManager->addSuccessMessage(__('Shop have been saved.'));
-        } catch (AlreadyExistsException | \Exception $e) {
-            $mediaDirectory = $this->_objectManager->get('Magento\Framework\Filesystem')->getDirectoryRead(DirectoryList::MEDIA);
-            $mediaRootDir = $mediaDirectory->getAbsolutePath();
-
-            if ($this->file->isExists($mediaRootDir . $fileName)) {
-                $this->file->deleteFile($mediaRootDir . $fileName);
-            }
+        } catch (AlreadyExistsException | Exception $e) {
             $this->messageManager->addErrorMessage(__('Error occurred when creating shop.'));
         }
-        return $this->_redirect("admin_crud/maincontroller/index");
+        return $this->_redirect("admin_crud/index/index");
     }
 }

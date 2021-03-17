@@ -1,10 +1,10 @@
 <?php
-namespace Elogic\AdminCrud\Model\ResourceModel\StoreModelCollections;
+namespace Elogic\AdminCrud\Model\ResourceModel\ShopCollections;
 
 use Magento\Framework\ObjectManagerInterface;
 
 /**
- * Factory class for @see \Elogic\AdminCrud\Model\ResourceModel\StoreModelCollections\Collection
+ * Factory class for @see \Elogic\AdminCrud\Model\ResourceModel\ShopCollections\Collection
  */
 class CollectionFactory
 {
@@ -28,7 +28,7 @@ class CollectionFactory
      * @param ObjectManagerInterface $objectManager
      * @param string $instanceName
      */
-    public function __construct(ObjectManagerInterface $objectManager, $instanceName = '\\Elogic\\AdminCrud\\Model\\ResourceModel\\StoreModelCollections\\Collection')
+    public function __construct(ObjectManagerInterface $objectManager, $instanceName = '\\Elogic\\AdminCrud\\Model\\ResourceModel\\ShopCollections\\Collection')
     {
         $this->_objectManager = $objectManager;
         $this->_instanceName = $instanceName;

@@ -2,9 +2,9 @@
 declare(strict_types=1);
 namespace Elogic\AdminCrud\Model;
 
+use Elogic\AdminCrud\Api\Data\ShopInterface;
+use Elogic\AdminCrud\Api\ShopRepositoryInterface;
 use Elogic\AdminCrud\Model\ResourceModel\ShopResource;
-use Elogic\StoreLocator\Api\Data\ShopInterface;
-use Elogic\StoreLocator\Api\ShopRepositoryInterface;
 use Exception;
 use Magento\Framework\Exception\AlreadyExistsException;
 use Magento\Framework\Exception\CouldNotDeleteException;

@@ -12,8 +12,8 @@
         <column name="work_schedule" xsi:type="varchar" nullable="false" comment="Standard work schedule"/>
         <column name="holiday_work_schedule" xsi:type="varchar" nullable="false" comment="Work schedule at holidays"/>
 
-        <column name="latitude" xsi:type="decimal" precision="8" scale="6" unsigned="false" comment="Geographical Latitude"/>
-        <column name="longitude" xsi:type="decimal" precision="9" scale="6" unsigned="false" comment="Geographical Longitude"/>
+        <column name="latitude" xsi:type="double" precision="9" scale="7" unsigned="false" comment="Geographical Latitude"/>
+        <column name="longitude" xsi:type="double" precision="10" scale="7" unsigned="false" comment="Geographical Longitude"/>
 
 
         <constraint xsi:type="primary" referenceId="PRIMARY">

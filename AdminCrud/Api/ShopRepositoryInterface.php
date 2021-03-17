@@ -1,9 +1,9 @@
 <?php
 declare(strict_types=1);
 
-namespace Elogic\StoreLocator\Api;
+namespace Elogic\AdminCrud\Api;
 
-use Elogic\StoreLocator\Api\Data\ShopInterface;
+use Elogic\AdminCrud\Api\Data\ShopInterface;
 use Exception;
 use Magento\Framework\Exception\AlreadyExistsException;
 use Magento\Framework\Exception\NoSuchEntityException;

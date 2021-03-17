@@ -13,7 +13,7 @@ class Import extends Command
     private const PATH = 'path';
 
     /**
-     * to run command please enter sudo php bin/magento example:import --path="/your/path"
+     * to run command please enter sudo php bin/magento shops:import --path="/your/path"
      */
     protected function configure()
     {
@@ -26,7 +26,7 @@ class Import extends Command
             )
         ];
 
-        $this->setName('example:import')
+        $this->setName('shops:import')
             ->setDescription('Demo command line')
             ->setDefinition($options);
 

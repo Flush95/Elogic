@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Elogic\AdminCrud\Block;
 
-use Elogic\AdminCrud\Model\ResourceModel\StoreModelCollections\Collection;
+use Elogic\AdminCrud\Model\ResourceModel\ShopCollections\Collection;
 use Magento\Framework\View\Element\Template;
 
 class CRUD extends Template

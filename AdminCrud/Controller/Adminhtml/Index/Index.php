@@ -1,5 +1,5 @@
 <?php
-namespace Elogic\AdminCrud\Controller\Adminhtml\MainController;
+namespace Elogic\AdminCrud\Controller\Adminhtml\Index;
 
 use Elogic\AdminConfig\Helper\Data;
 use Magento\Backend\App\Action;
@@ -45,5 +45,10 @@ class Index extends Action
     protected function moduleEnabled(): bool
     {
         return boolval($this->data->getModuleStatus());
+    }
+
+    protected function _isAllowed()
+    {
+        return $this->_authorization->isAllowed('Magento_Backend::admin');
     }
 }

@@ -1,6 +1,6 @@
 <?php
 
-namespace Elogic\AdminCrud\Model\ResourceModel\StoreModelCollections;
+namespace Elogic\AdminCrud\Model\ResourceModel\ShopCollections;
 
 use Elogic\AdminCrud\Model\ResourceModel\ShopResource;
 use Elogic\AdminCrud\Model\Shop;

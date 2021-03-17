@@ -70,7 +70,7 @@
         <settings>
             <editorConfig>
                 <param name="clientConfig" xsi:type="array">
-                    <item name="saveUrl" xsi:type="url" path="admin_crud/post/update"/>
+                    <item name="saveUrl" xsi:type="url" path="admin_crud/post/inlineEdit"/>
                     <item name="validateBeforeSave" xsi:type="boolean">false</item>
                 </param>
                 <param name="indexField" xsi:type="string">shop_id</param>
