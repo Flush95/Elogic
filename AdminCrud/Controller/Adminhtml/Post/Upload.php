@@ -6,7 +6,10 @@ use Elogic\AdminCrud\Model\Image\ImageUploader;
 use Exception;
 use Magento\Backend\App\Action;
 use Magento\Backend\App\Action\Context;
+use Magento\Framework\App\ResponseInterface;
+use Magento\Framework\Controller\Result\Json;
 use Magento\Framework\Controller\Result\JsonFactory;
+use Magento\Framework\Controller\ResultInterface;
 
 class Upload extends Action
 {
@@ -32,6 +35,9 @@ class Upload extends Action
         $this->jsonFactory = $jsonFactory;
     }
 
+    /**
+     * @return ResponseInterface|Json|ResultInterface
+     */
     public function execute()
     {
         try {

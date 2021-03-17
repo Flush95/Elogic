@@ -2,18 +2,20 @@
 namespace Elogic\AdminCrud\Controller\Adminhtml\Post;
 
 use Elogic\AdminCrud\Model\ResourceModel\ShopCollections\CollectionFactory;
+use Elogic\AdminCrud\Model\Shop;
+use Elogic\AdminCrud\Model\ShopRepository;
 use Magento\Backend\App\Action;
 use Magento\Backend\App\Action\Context;
 use Magento\Framework\App\ObjectManager;
-use Magento\Framework\App\RequestInterface;
 use Magento\Framework\App\ResponseInterface;
 use Magento\Framework\Controller\ResultInterface;
+use Magento\Framework\Exception\CouldNotDeleteException;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Ui\Component\MassAction\Filter;
 
 class MassDelete extends Action
 {
-    private RequestInterface $request;
     /**
      * @var Filter
      */
@@ -26,17 +28,14 @@ class MassDelete extends Action
     /**
      * MassDelete constructor.
      * @param Context $context
-     * @param RequestInterface $request
      * @param Filter $filter
      * @param CollectionFactory $collectionFactory
      */
     public function __construct(
         Context $context,
-        RequestInterface $request,
         Filter $filter,
         CollectionFactory $collectionFactory
     ) {
-        $this->request = $request;
         $this->filter = $filter;
         $this->collectionFactory = $collectionFactory;
         parent::__construct($context);
@@ -44,23 +43,31 @@ class MassDelete extends Action
 
     /**
      * @return ResponseInterface|ResultInterface
-     * @throws LocalizedException
      */
     public function execute()
     {
-        /*var_dump($this->filter->getCollection($this->collectionFactory->create())->getSize());
-        die();*/
-        $collection = $this->filter->getCollection($this->collectionFactory->create());
-        $collectionSize = $collection->getSize();
-
-        foreach ($collection as $item) {
-            $objectManager = ObjectManager::getInstance();
-            $product = $objectManager->create('Elogic\AdminCrud\Model\Shop')->load($item->getId());
-            $product->delete();
+        $collection = null;
+        try {
+            $collection = $this->filter->getCollection($this->collectionFactory->create());
+        } catch (LocalizedException $e) {
+            $this->messageManager->addErrorMessage(__('Some error have been occurred when delete shops'));
+            return $this->_redirect("admin_crud/index/index");
         }
 
-        $this->messageManager->addSuccessMessage(__('A total of %1 element(s) have been deleted.', $collectionSize));
-
-        return $this->_redirect("admin_crud/maincontroller/index");
+        if (!is_null($collection)) {
+            $collectionSize = $collection->getSize();
+            /** @var Shop $shop */
+            foreach ($collection as $shop) {
+                /** @var ShopRepository $shopRepository */
+                $shopRepository = ObjectManager::getInstance()->create('Elogic\AdminCrud\Model\ShopRepository');
+                try {
+                    $shopRepository->deleteShopById($shop->getShopId());
+                } catch (CouldNotDeleteException | NoSuchEntityException $e) {
+                    $this->messageManager->addErrorMessage(__('Shop with id=%1 cannot be deleted.'), $shop->getShopId());
+                }
+            }
+            $this->messageManager->addSuccessMessage(__('%1 %2 shop(s) have been deleted.', $collectionSize, $collectionSize > 1 ? 'shop' : 'shops'));
+        }
+        return $this->_redirect("admin_crud/index/index");
     }
 }

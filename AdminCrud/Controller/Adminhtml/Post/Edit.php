@@ -14,9 +14,6 @@ use Magento\Framework\Controller\ResultInterface;
 use Magento\Framework\View\Result\Page;
 use Magento\Framework\View\Result\PageFactory;
 
-/**
- * Edit CMS block action.
- */
 class Edit extends Action implements HttpGetActionInterface
 {
 
@@ -67,8 +64,6 @@ class Edit extends Action implements HttpGetActionInterface
             $resultPage->getConfig()->getTitle()->prepend(__('New Shop'));
             return $resultPage;
         }
-
-        $resultPage->getConfig()->getTitle()->prepend(__('Shop'));
         $resultPage->getConfig()->getTitle()->prepend(__('Edit: ') . $model->getShopName());
 
         return $resultPage;

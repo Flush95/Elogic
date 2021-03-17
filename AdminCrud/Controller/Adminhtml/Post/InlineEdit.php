@@ -1,10 +1,15 @@
 <?php
 namespace Elogic\AdminCrud\Controller\Adminhtml\Post;
 
+use Elogic\AdminCrud\Model\Shop;
+use Elogic\AdminCrud\Model\ShopRepository;
 use Exception;
 use Magento\Backend\App\Action;
 use Magento\Backend\App\Action\Context;
+use Magento\Framework\App\ResponseInterface;
+use Magento\Framework\Controller\Result\Json;
 use Magento\Framework\Controller\Result\JsonFactory;
+use Magento\Framework\Controller\ResultInterface;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -19,6 +24,12 @@ class InlineEdit extends Action
     private JsonFactory $jsonFactory;
     private $logger;
 
+    /**
+     * InlineEdit constructor.
+     * @param Context $context
+     * @param JsonFactory $jsonFactory
+     * @param LoggerInterface $logger
+     */
     public function __construct(Context $context, JsonFactory $jsonFactory, LoggerInterface $logger)
     {
         parent::__construct($context);
@@ -26,6 +37,9 @@ class InlineEdit extends Action
         $this->logger = $logger;
     }
 
+    /**
+     * @return ResponseInterface|Json|ResultInterface
+     */
     public function execute()
     {
         $resultJson = $this->jsonFactory->create();
@@ -39,14 +53,19 @@ class InlineEdit extends Action
             $postItems = $this->getRequest()->getParam('items', []);
 
             if (!count($postItems)) {
-                $messages[] = __('Please correct the data sent.');
+                $messages[] = __('Please correct data');
                 $error = true;
             } else {
                 foreach (array_keys($postItems) as $model_id) {
-                    $model = $this->_objectManager->create('Elogic\AdminCrud\Model\Shop')->load($model_id);
+
+                    /** @var ShopRepository $shopRepository */
+                    $shopRepository = $this->_objectManager->create('Elogic\AdminCrud\Model\ShopRepository');
+
                     try {
+                        /** @var Shop $model */
+                        $model = $shopRepository->getShopById($model_id);
                         $model->setData(array_merge($model->getData(), $postItems[$model_id]));
-                        $model->save();
+                        $shopRepository->saveShop($model);
                     } catch (Exception $e) {
                         $messages[] = "[ID: {$model_id}]  {$e->getMessage()}";
                         $error = true;

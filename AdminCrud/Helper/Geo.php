@@ -36,7 +36,6 @@ class Geo
         );
 
         $output = json_decode($geocodeFromAddress);
-        var_dump($output->results[0]);
 
         $data = ['latitude' => 0.000000, 'longitude' => 0.000000];
         if ($output->status == 'OK') {

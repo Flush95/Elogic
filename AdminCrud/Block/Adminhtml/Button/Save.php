@@ -23,6 +23,9 @@ class Save extends Generic implements ButtonProviderInterface
             'sort_order' => 10
         ];
     }*/
+    /**
+     * @return array
+     */
     public function getButtonData(): array
     {
 
