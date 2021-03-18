@@ -6,11 +6,10 @@
             <referenceContainer name="sidebar.additional">
                 <referenceBlock name="catalog.compare.sidebar" remove="true" />
                 <referenceBlock name="wishlist_sidebar" remove="true" />
-
-                <block name="side_block" class="Elogic\StoreLocator\Block\Index\Index" template="Elogic_StoreLocator::sidebar.phtml">
-
-                </block>
+                <block name="side_block" class="Elogic\StoreLocator\Block\Index\Index" template="Elogic_StoreLocator::sidebar.phtml"/>
             </referenceContainer>
+            <block name="mapsection" class="Elogic\StoreLocator\Block\Index\Index" template="Elogic_StoreLocator::mapsection.phtml"/>
         </referenceContainer>
+        <referenceContainer name="footer" remove="true" />
     </body>
 </page>

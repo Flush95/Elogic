@@ -12,8 +12,8 @@
             <argument name="resourceModel" xsi:type="string">Elogic\AdminCrud\Model\ResourceModel\ShopResource</argument>
         </arguments>
     </virtualType>
-    <preference for="Elogic\StoreLocator\Api\StoreRepositoryInterface" type="Elogic\AdminCrud\Model\ShopRepository"/>
-    <preference for="Elogic\StoreLocator\Api\Data\ShopInterface" type="Elogic\AdminCrud\Model\Shop"/>
+    <preference for="Elogic\AdminCrud\Api\ShopRepositoryInterface" type="Elogic\AdminCrud\Model\ShopRepository"/>
+    <preference for="Elogic\AdminCrud\Api\Data\ShopInterface" type="Elogic\AdminCrud\Model\Shop"/>
 
 
 

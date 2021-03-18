@@ -1,12 +1,35 @@
 <?php
 declare(strict_types=1);
+use Elogic\AdminCrud\Model\Shop;
+use Elogic\StoreLocator\Block\Index\Index;
 
-/** @var Elogic\StoreLocator\Block\Index\Index $block */
-
-$block->getShopRepId();
-//var_dump($block->getAllStores()->getData());
-
+/** @var Index $block */
+/** @var Shop $shop */
 
 ?>
-<h1>Hello from sidebar</h1>
+<label for="searchShop"/>
+<input class="form-control" id="searchShop" type="text" placeholder="Search Shop"/>
 
+<?php
+foreach ($block->getAllShops() as $shop) {?>
+<div class="">
+    <div class="card mb-4" style="max-width: 540px;">
+        <div class="row g-0">
+            <div class="col-md-4">
+                <img src="<?= $block->getImagesUrl() . $shop->getImgUrl() ?>" alt="Shop Image">
+            </div>
+            <div class="col-md-8">
+                <div class="card-body">
+                    <h5 class="card-title fs-2"><strong><?= $shop->getShopName() ?></strong></h5>
+                    <p class="card-text fs-6">State: <?= $shop->getShopState() ?></p>
+                    <p class="card-text fs-6">City: <?= $shop->getShopCity() ?></p>
+                    <p class="card-text fs-6">Address: <?= $shop->getShopAddress() ?></p>
+                    <p class="card-text fs-6">Zip: <?= $shop->getShopZip() ?></p>
+                </div>
+            </div>
+        </div>
+        <a href="#<?= $shop->getShopId() ?>" id="<?= $shop->getShopId() ?>" class="stretched-link"></a>
+    </div>
+<?php
+}
+?>

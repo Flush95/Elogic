@@ -1,0 +1,51 @@
+<?php
+declare(strict_types=1);
+use Elogic\StoreLocator\Block\Index\Index;
+
+/** @var Index $block */
+
+?>
+
+
+<div id="map" style="height: 50em; width: 100%;"></div>
+<script>
+    require(['jquery'], function($) {
+            $('a.stretched-link').on('click', function () {
+                var id = $(this).attr('id');
+                var geo = <?= $block->getShopById()?> ;
+                position = new google.maps.LatLng(geo['latitude'], geo['longitude']);
+                marker.setPosition(position);
+                /*$.ajax({
+                    url: '',
+                    data: {
+                        text: $("textarea[name=Status]").val(),
+                        Status: id
+                    },
+                    dataType: 'json'
+                });*/
+
+            });
+    })
+</script>
+
+
+<script>
+    function initMap() {
+        // The location of Uluru
+        const uluru = { lat: -25.344, lng: 131.036 };
+        // The map, centered at Uluru
+        const map = new google.maps.Map(document.getElementById("map"), {
+            zoom: 4,
+            center: uluru,
+        });
+        // The marker, positioned at Uluru
+        const marker = new google.maps.Marker({
+            position: uluru,
+            map: map,
+        });
+    }
+</script>
+<script
+    src="https://maps.googleapis.com/maps/api/js?key=<?= $block->getApiKey() ?>&callback=initMap&libraries=&v=weekly"
+    async
+></script>

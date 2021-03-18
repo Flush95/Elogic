@@ -32,7 +32,6 @@ class ShopRepository implements ShopRepositoryInterface
     }
 
     /**
-     * }
      * Get Shop By Id
      * @param int $id
      * @return ShopInterface

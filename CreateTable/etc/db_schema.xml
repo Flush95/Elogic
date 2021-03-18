@@ -14,7 +14,7 @@
 
         <column name="latitude" xsi:type="double" precision="9" scale="7" unsigned="false" comment="Geographical Latitude"/>
         <column name="longitude" xsi:type="double" precision="10" scale="7" unsigned="false" comment="Geographical Longitude"/>
-
+        <column name="url_key" xsi:type="varchar" nullable="true" comment="Shop Url Key"/>
 
         <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="shop_id"/>
