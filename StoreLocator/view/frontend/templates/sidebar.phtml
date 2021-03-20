@@ -1,19 +1,16 @@
 <?php
 declare(strict_types=1);
-use Elogic\AdminCrud\Model\Shop;
+use Elogic\StoreLocator\Model\Shop;
 use Elogic\StoreLocator\Block\Index\Index;
 
 /** @var Index $block */
 /** @var Shop $shop */
-
 ?>
-<label for="searchShop"/>
-<input class="form-control" id="searchShop" type="text" placeholder="Search Shop"/>
-
-<?php
-foreach ($block->getAllShops() as $shop) {?>
-<div class="">
-    <div class="card mb-4" style="max-width: 540px;">
+<form method="get" >
+    <input type="search" name="search" class="form-control" id="searchShop" placeholder="Search Shop"/>
+</form>
+<?php foreach ($block->getAllShops() as $shop) : ?>
+    <div class="card mb-4" style="max-width: 540px;" id="<?= $shop->getShopId() ?>">
         <div class="row g-0">
             <div class="col-md-4">
                 <img src="<?= $block->getImagesUrl() . $shop->getImgUrl() ?>" alt="Shop Image">
@@ -30,6 +27,30 @@ foreach ($block->getAllShops() as $shop) {?>
         </div>
         <a href="#<?= $shop->getShopId() ?>" id="<?= $shop->getShopId() ?>" class="stretched-link"></a>
     </div>
-<?php
-}
-?>
+<?php endforeach; ?>
+
+<?php if ($block->getPagerHtml()): ?>
+    <div class="toolbar">
+        <?php echo $block->getPagerHtml(); ?>
+    </div>
+<?php endif ?>
+<script>
+    require(['jquery'], function($) {
+        $(function(){
+            $('a.stretched-link').on('click', function(){
+                //$('.card').removeAttribute('style');
+                $(".card").removeAttr("style")
+                var elem = document.getElementById($(this).attr('id'));
+
+                elem.setAttribute("style", "border: 2px solid green");
+
+            });
+        });
+
+        $('#searchShop').on('keypress',function(e) {
+            if(e.which == 13) {
+                this.form.submit();
+            }
+        });
+    });
+</script>

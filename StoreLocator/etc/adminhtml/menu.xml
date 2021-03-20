@@ -1,0 +1,42 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Backend:etc/menu.xsd">
+    <menu>
+        <add id="Elogic_StoreLocator::crud"
+             title="CRUD"
+             translate="title"
+             module="Elogic_StoreLocator"
+             sortOrder="50"
+             dependsOnModule="Elogic_StoreLocator"
+             resource="Elogic_StoreLocator::crud"
+        />
+        <add id="Elogic_StoreLocator::crud_operations"
+             title="CRUD Actions"
+             translate="title"
+             module="Elogic_StoreLocator"
+             parent="Elogic_StoreLocator::crud"
+             sortOrder="10"
+             dependsOnModule="Elogic_StoreLocator"
+             action="store_locator/index"
+             resource="Elogic_StoreLocator::crud"
+        />
+        <add id="Elogic_StoreLocator::configureApi"
+             title="Google Maps API Key"
+             translate="title"
+             module="Elogic_StoreLocator"
+             sortOrder="20"
+             parent="Elogic_StoreLocator::crud"
+             action="adminhtml/system_config/edit/section/admin_config_api"
+             resource="Elogic_StoreLocator::crud"
+        />
+        <add id="Elogic_StoreLocator::configureEnable"
+             title="Enable/Disable Module"
+             translate="title"
+             module="Elogic_StoreLocator"
+             sortOrder="30"
+             parent="Elogic_StoreLocator::crud"
+             action="adminhtml/system_config/edit/section/admin_config_module_status"
+             resource="Elogic_StoreLocator::crud"
+        />
+
+    </menu>
+</config>

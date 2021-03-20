@@ -1,0 +1,23 @@
+{
+    "elogic_shops": {
+        "column": {
+            "shop_id": true,
+            "shop_name": true,
+            "description": true,
+            "img_url": true,
+            "shop_city": true,
+            "shop_zip": true,
+            "shop_state": true,
+            "shop_address": true,
+            "work_schedule": true,
+            "holiday_work_schedule": true,
+            "latitude": true,
+            "longitude": true,
+            "url_key": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "ELOGIC_SHOPS_SHOP_NAME": true
+        }
+    }
+}

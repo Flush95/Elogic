@@ -1,0 +1,46 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+
+    <type name="Magento\Framework\View\Element\UiComponent\DataProvider\CollectionFactory">
+        <arguments>
+            <argument name="collections" xsi:type="array">
+                <item name="storelocator_shops_listing_data_source" xsi:type="string">Elogic\StoreLocator\Model\ResourceModel\ShopCollections\Collection</item>
+            </argument>
+        </arguments>
+    </type>
+    <virtualType name="Elogic\StoreLocator\Model\ResourceModel\ShopCollections\Collection" type="Magento\Framework\View\Element\UiComponent\DataProvider\SearchResult">
+        <arguments>
+            <argument name="mainTable" xsi:type="string">elogic_shops</argument>
+            <argument name="resourceModel" xsi:type="string">Elogic\StoreLocator\Model\ResourceModel\ShopResource</argument>
+        </arguments>
+    </virtualType>
+    <preference for="Elogic\StoreLocator\Api\ShopRepositoryInterface" type="Elogic\StoreLocator\Model\ShopRepository"/>
+    <preference for="Elogic\StoreLocator\Api\Data\ShopInterface" type="Elogic\StoreLocator\Model\Shop"/>
+
+
+    <virtualType name="Elogic\StoreLocator\Model\Image\ImageUpload" type="Elogic\StoreLocator\Model\Image\ImageUploader">
+        <arguments>
+            <argument name="baseTmpPath" xsi:type="string">images</argument>
+            <argument name="basePath" xsi:type="string">images</argument>
+            <argument name="allowedExtensions" xsi:type="array">
+                <item name="jpg" xsi:type="string">jpg</item>
+                <item name="jpeg" xsi:type="string">jpeg</item>
+                <item name="gif" xsi:type="string">gif</item>
+                <item name="png" xsi:type="string">png</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <type name="Elogic\StoreLocator\Controller\Adminhtml\Post\Upload">
+        <arguments>
+            <argument name="imageUploader" xsi:type="object">Elogic\StoreLocator\Model\Image\ImageUpload</argument>
+        </arguments>
+    </type>
+
+    <type name="Magento\Framework\Console\CommandList">
+        <arguments>
+            <argument name="commands" xsi:type="array">
+                <item name="exampleImport" xsi:type="object">Elogic\StoreLocator\Console\Import</item>
+            </argument>
+        </arguments>
+    </type>
+</config>
