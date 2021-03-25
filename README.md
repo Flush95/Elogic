@@ -24,3 +24,12 @@ List of required files for correct module testing
 - [magento 2] - Markdown parser done right. Fast and easy to extend.
 - [jQuery] 
 - [MySQl]
+
+## Sidebar wich contains list of shops with custom search, map and pagination.
+![alt text](https://github.com/Flush95/Elogic/blob/master/Project%20Prewiew/shop_list_active.png?raw=true)
+
+## Concrete Shop View, builded with underscore.js and ajax
+![alt text](https://github.com/Flush95/Elogic/blob/master/Project%20Prewiew/shop_view.png?raw=true)
+
+## Admin area. Shops CRUD 
+![alt_text](https://github.com/Flush95/Elogic/blob/master/Project%20Prewiew/admin_crud_main.png?raw=true)
