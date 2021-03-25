@@ -1,0 +1,11 @@
+<?php
+$api = \Magento\Framework\App\ObjectManager::getInstance()->create('\Elogic\StoreLocator\Helper\Data');
+?>
+
+<div class="col-lg-12">
+    <div id="map" style="height: 45em; width: 100%;"></div>
+</div>
+<p class="font-monospace fs-3 shopDescription"></p>
+
+<script src="https://maps.googleapis.com/maps/api/js?key=<?= $api->getApiKey() ?>&libraries=&v=weekly" async>
+</script>

@@ -44,4 +44,18 @@ interface ShopRepositoryInterface
      * @return bool
      */
     public function deleteShop(ShopInterface $shop): bool;
+
+    /**
+     * Get Shop by Url_key
+     * @param string $url_key
+     * @throws NoSuchEntityException
+     * @return ShopInterface
+     */
+    public function getShopByUrlKey(string $url_key): ShopInterface;
+
+    /**
+     * Get All Shops
+     * @return array|null
+     */
+    public function getAllShops(): ?array;
 }

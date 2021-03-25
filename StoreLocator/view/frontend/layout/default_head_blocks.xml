@@ -5,7 +5,8 @@
               rel="stylesheet"
               src_type="url"
         />
-
-
     </head>
+    <body>
+        <move element="page.messages" destination="after.body.start"  after="-"/>
+    </body>
 </page>

@@ -22,5 +22,8 @@
         <constraint xsi:type="unique" referenceId="SHOP_NAME">
             <column name="shop_name"/>
         </constraint>
+        <constraint xsi:type="unique" referenceId="url_key">
+            <column name="url_key"/>
+        </constraint>
     </table>
 </schema>

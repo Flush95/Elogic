@@ -161,4 +161,17 @@ interface ShopInterface extends ExtensibleDataInterface
      */
     public function setLongitude(float $longitude): ShopInterface;
 
+    /**
+     * Get Shop Url Key
+     * @return string|null
+     */
+    public function getUrlKey(): ?string;
+
+    /**
+     * Set Url Key For Shop
+     * @param string $url_key
+     * @return ShopInterface
+     */
+    public function setUrlKey(string $url_key): ShopInterface;
+
 }

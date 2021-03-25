@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="2columns-left" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
     <head>
-        <script src="Elogic_StoreLocator::js/storelocator.js"/>
+        <script src="Elogic_StoreLocator::js/shop_preview.js"/>
     </head>
     <body>
         <referenceBlock name="navigation.sections" remove="true" />
@@ -9,9 +9,9 @@
             <referenceContainer name="sidebar.additional">
                 <referenceBlock name="catalog.compare.sidebar" remove="true" />
                 <referenceBlock name="wishlist_sidebar" remove="true" />
-                <block name="side_block" class="Elogic\StoreLocator\Block\Index\Index" template="Elogic_StoreLocator::storelocator/sidebar.phtml"/>
+                <block name="shop_view" class="Elogic\StoreLocator\Block\Shop\ShopView" template="Elogic_StoreLocator::shop_preview/shop_info.phtml"/>
             </referenceContainer>
-            <block name="mapSection" class="Elogic\StoreLocator\Block\Index\Index" template="Elogic_StoreLocator::storelocator/map.phtml"/>
+            <block name="shop_view_map" template="Elogic_StoreLocator::shop_preview/map.phtml"/>
         </referenceContainer>
         <referenceContainer name="footer" remove="true" />
     </body>

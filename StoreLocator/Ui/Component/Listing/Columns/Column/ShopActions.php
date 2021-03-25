@@ -30,6 +30,15 @@ class ShopActions extends Column
                     'label' => __('Edit'),
                     'hidden' => false
                 ];
+                $item[$this->getData('name')]['delete'] = [
+                    'href' => $this->urlBuilder->getUrl('store_locator/post/delete', ['shop_id' => $item['shop_id']]),
+                    'label' => __('Delete'),
+                    'hidden' => false,
+                    'confirm' => [
+                        'title' => __('Delete shop with id %1', $item['shop_id']),
+                        'message' => __('Are you sure? you will be delete a shop with id %1', $item['shop_id']),
+                    ]
+                ];
             }
         }
 

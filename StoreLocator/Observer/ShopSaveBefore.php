@@ -8,6 +8,7 @@ use Magento\Framework\Event\ObserverInterface;
 class ShopSaveBefore implements ObserverInterface
 {
 
+
     /**
      * @var Geo
      */
@@ -22,14 +23,12 @@ class ShopSaveBefore implements ObserverInterface
         $this->geoCoordinates = $geoCoordinates;
     }
 
-
     /**
      * @param Observer $observer
      */
     public function execute(Observer $observer)
     {
         $shop = $observer->getEvent()->getObject();
-
         if (!$shop) {
             return;
         }

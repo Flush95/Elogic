@@ -4,6 +4,8 @@ namespace Elogic\StoreLocator\Model;
 
 use Elogic\StoreLocator\Api\Data\ShopInterface;
 use Elogic\StoreLocator\Api\ShopRepositoryInterface;
+use Elogic\StoreLocator\Helper\ImageLinkBuilder;
+use Elogic\StoreLocator\Model\ResourceModel\ShopCollections\CollectionFactory;
 use Elogic\StoreLocator\Model\ResourceModel\ShopResource;
 use Exception;
 use Magento\Framework\Exception\AlreadyExistsException;
@@ -13,7 +15,6 @@ use Magento\Framework\Exception\NoSuchEntityException;
 
 class ShopRepository implements ShopRepositoryInterface
 {
-
     /**
      * @var ShopResource
      */
@@ -22,13 +23,32 @@ class ShopRepository implements ShopRepositoryInterface
      * @var ShopFactory
      */
     private ShopFactory $shopFactory;
+    /**
+     * @var CollectionFactory
+     */
+    private CollectionFactory $shops;
+    /**
+     * @var ImageLinkBuilder
+     */
+    private ImageLinkBuilder $linkBuilder;
 
+    /**
+     * ShopRepository constructor.
+     * @param ShopResource $shop
+     * @param ShopFactory $shopFactory
+     * @param CollectionFactory $shops
+     * @param ImageLinkBuilder $linkBuilder
+     */
     public function __construct(
         ShopResource $shop,
-        ShopFactory $shopFactory
+        ShopFactory $shopFactory,
+        CollectionFactory $shops,
+        ImageLinkBuilder $linkBuilder
     ) {
         $this->shop = $shop;
         $this->shopFactory = $shopFactory;
+        $this->shops = $shops;
+        $this->linkBuilder = $linkBuilder;
     }
 
     /**
@@ -43,11 +63,27 @@ class ShopRepository implements ShopRepositoryInterface
         $this->shop->load($shop, $id);
 
         if (!$shop->getShopId()) {
-            throw new NoSuchEntityException(__('Unable to find store with id "%1"', $id));
+            throw new NoSuchEntityException(__('Unable to find shop with id %1', $id));
         }
         return $shop;
     }
 
+    /**
+     * Get Shop by Url_key
+     * @param string $url_key
+     * @return ShopInterface
+     * @throws NoSuchEntityException
+     */
+    public function getShopByUrlKey(string $url_key): ShopInterface
+    {
+        $shop = $this->shopFactory->create();
+        $this->shop->load($shop, $url_key, 'url_key');
+        if (!$shop->getShopId()) {
+            throw new NoSuchEntityException(__('Unable to find shop with url_key ' . $url_key));
+        }
+        $shop->setImgUrl($this->linkBuilder->getImgLink($shop->getImgUrl()));
+        return $shop;
+    }
 
     /**
      * @param ShopInterface $shop
@@ -91,4 +127,18 @@ class ShopRepository implements ShopRepositoryInterface
         }
         return true;
     }
+
+    /**
+     * @return array|null
+     */
+    public function getAllShops(): ?array
+    {
+        $collection = $this->shops->create();
+        /** @var Shop $shop */
+        foreach ($collection->getItems() as $shop) {
+            $shop->setImgUrl($this->linkBuilder->getImgLink($shop->getImgUrl()));
+        }
+        return $collection->getData();
+    }
+
 }

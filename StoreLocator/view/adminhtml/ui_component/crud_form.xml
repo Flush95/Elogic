@@ -10,7 +10,7 @@
     <settings>
         <buttons>
             <button name="save" class="Elogic\StoreLocator\Block\Adminhtml\Button\Save"/>
-            <!--<button name="delete" class="Academy\StoreLocator\Block\Adminhtml\StoreLocator\Edit\DeleteButton"/>-->
+            <button name="delete" class="Elogic\StoreLocator\Block\Adminhtml\Button\Delete"/>
             <button name="back" class="Elogic\StoreLocator\Block\Adminhtml\Button\Back"/>
         </buttons>
         <namespace>crud_form</namespace>

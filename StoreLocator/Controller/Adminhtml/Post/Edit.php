@@ -41,7 +41,7 @@ class Edit extends Action implements HttpGetActionInterface
      */
     public function execute()
     {
-        $id = $this->_request->getParam('shop_id');
+        $id = $this->getRequest()->getParam('shop_id');
         $resultPage = $this->resultPageFactory->create();
         $resultPage->setActiveMenu('Elogic_AdminCrud::crud');
 

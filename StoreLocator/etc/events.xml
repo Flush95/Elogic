@@ -3,4 +3,10 @@
     <event name="shop_save_before">
         <observer name="shop_save_before_event" instance="Elogic\StoreLocator\Observer\ShopSaveBefore" />
     </event>
+    <event name="shop_save_after">
+        <observer name="shop_save_after_event" instance="Elogic\StoreLocator\Observer\ShopSaveAfter" />
+    </event>
+    <event name="shop_delete_after">
+        <observer name="shop_delete_after_event" instance="Elogic\StoreLocator\Observer\ShopDeleteAfter" />
+    </event>
 </config>

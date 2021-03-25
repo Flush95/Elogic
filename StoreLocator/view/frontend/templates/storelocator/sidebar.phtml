@@ -13,15 +13,15 @@ use Elogic\StoreLocator\Block\Index\Index;
     <div class="card mb-4" style="max-width: 540px;" id="<?= $shop->getShopId() ?>">
         <div class="row g-0">
             <div class="col-md-4">
-                <img src="<?= $block->getImagesUrl() . $shop->getImgUrl() ?>" alt="Shop Image">
+                <img src="<?= $block->linkBuilder->getImgLink($shop->getImgUrl()) ?>" alt="Shop Image">
             </div>
             <div class="col-md-8">
                 <div class="card-body">
                     <h5 class="card-title fs-2"><strong><?= $shop->getShopName() ?></strong></h5>
-                    <p class="card-text fs-6">State: <?= $shop->getShopState() ?></p>
-                    <p class="card-text fs-6">City: <?= $shop->getShopCity() ?></p>
-                    <p class="card-text fs-6">Address: <?= $shop->getShopAddress() ?></p>
-                    <p class="card-text fs-6">Zip: <?= $shop->getShopZip() ?></p>
+                    <p class="card-text fs-5 fw-normal lh-sm">State: <?= $shop->getShopState() ?></p>
+                    <p class="card-text fs-5 fw-normal lh-sm">City: <?= $shop->getShopCity() ?></p>
+                    <p class="card-text fs-5 fw-normal lh-sm">Address: <?= $shop->getShopAddress() ?></p>
+                    <p class="card-text fs-5 fw-normal lh-sm">Zip: <?= $shop->getShopZip() ?></p>
                 </div>
             </div>
         </div>
@@ -34,23 +34,8 @@ use Elogic\StoreLocator\Block\Index\Index;
         <?php echo $block->getPagerHtml(); ?>
     </div>
 <?php endif ?>
+
 <script>
-    require(['jquery'], function($) {
-        $(function(){
-            $('a.stretched-link').on('click', function(){
-                //$('.card').removeAttribute('style');
-                $(".card").removeAttr("style")
-                var elem = document.getElementById($(this).attr('id'));
 
-                elem.setAttribute("style", "border: 2px solid green");
 
-            });
-        });
-
-        $('#searchShop').on('keypress',function(e) {
-            if(e.which == 13) {
-                this.form.submit();
-            }
-        });
-    });
 </script>

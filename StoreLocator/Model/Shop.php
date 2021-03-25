@@ -223,4 +223,21 @@ class Shop extends AbstractModel implements ShopInterface
         return $this->setData('longitude', $longitude);
     }
 
+
+    /**
+     * @return string|null
+     */
+    public function getUrlKey(): ?string
+    {
+        return $this->getData('url_key');
+    }
+
+    /**
+     * @param string $url_key
+     * @return ShopInterface
+     */
+    public function setUrlKey(string $url_key): ShopInterface
+    {
+        return $this->setData('url_key', $url_key);
+    }
 }
