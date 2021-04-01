@@ -21,7 +21,7 @@ class ShopProducts extends AbstractModel implements ShopProductsInterface
      */
     public function getShopId(): int
     {
-        return $this->getData('shop_id');
+        return intval($this->getData('shop_id'));
     }
 
     /**

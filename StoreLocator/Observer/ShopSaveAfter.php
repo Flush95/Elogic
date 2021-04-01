@@ -79,6 +79,7 @@ class ShopSaveAfter implements ObserverInterface
                 var_dump($e);
                 die();
             }
+
         }
     }
 }

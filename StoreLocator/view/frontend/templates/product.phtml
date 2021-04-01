@@ -1,0 +1,13 @@
+<?php
+use Elogic\StoreLocator\Block\Shop\Product;
+
+/** @var Product $block */
+
+?>
+
+<h2>Product is available in follow shops</h2>
+<?php foreach ($block->getShopsSoldProduct() as $shop): ?>
+    <h3><a href="/shops/<?= $shop->getUrlKey() ?>"><?= $shop->getShopName() ?></a></h3>
+
+<?php endforeach;?>
+
