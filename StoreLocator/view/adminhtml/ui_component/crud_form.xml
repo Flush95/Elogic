@@ -221,5 +221,20 @@
                 </item>
             </argument>
         </field>
+
+        <field name="shop_products">
+            <argument name="data" xsi:type="array">
+                <item name="options" xsi:type="object">Elogic\StoreLocator\Ui\Component\Form\Element\MultiselectDataProvider</item>
+                <item name="config" xsi:type="array">
+                    <item name="class" xsi:type="string">Elogic\StoreLocator\Ui\Component\Form\Element\Multiselect</item>
+                    <item name="dataType" xsi:type="string">text</item>
+                    <item name="label" xsi:type="string" translate="true">Select Products which sale this shop</item>
+                    <item name="formElement" xsi:type="string">multiselect</item>
+                    <item name="dataScope" xsi:type="string">shop_products</item>
+                    <item name="default" xsi:type="string">1</item>
+                    <item name="notice" xsi:type="string" translate="true">Press Ctrl key to select items</item>
+                </item>
+            </argument>
+        </field>
     </fieldset>
 </form>

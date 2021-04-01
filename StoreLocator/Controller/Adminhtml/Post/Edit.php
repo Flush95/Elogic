@@ -49,7 +49,7 @@ class Edit extends Action implements HttpGetActionInterface
             $model =  $this->_objectManager->create('Elogic\StoreLocator\Model\ShopRepository')->getShopById((int) $id);
 
             if (!$model->getShopId()) {
-                $this->messageManager->addErrorMessage(__('This store no longer exists.'));
+                $this->messageManager->addErrorMessage(__('This shop no longer exists.'));
                 $resultRedirect = $this->resultRedirectFactory->create();
                 return $resultRedirect->setPath('*/*/');
             }

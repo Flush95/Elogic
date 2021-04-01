@@ -1,7 +1,9 @@
 <?php
 namespace Elogic\StoreLocator\Ui\Component\Listing\Columns\Column;
 
+use Elogic\StoreLocator\Model\Shop;
 use Magento\Catalog\Helper\Image;
+use Magento\Framework\DataObject;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\UrlInterface;
 use Magento\Framework\View\Element\UiComponent\ContextInterface;
@@ -11,7 +13,6 @@ use Magento\Ui\Component\Listing\Columns\Column;
 
 class Thumbnail extends Column
 {
-    const ALT_FIELD = 'title';
     const ROUTE_PATH = 'store_locator/mainController/index';
     const DEFAULT_IMG = 'default.png';
     const PUB_MEDIA_PATH = 'pub/media/images/';
@@ -64,6 +65,8 @@ class Thumbnail extends Column
             $fieldName = $this->getData('name');
 
             foreach ($dataSource['data']['items'] as & $item) {
+                /** @var Shop $shop */
+                $shop = new DataObject($item);
                 $url = '';
                 $fileName = $item[$fieldName];
                 if ($fileName != '') {
@@ -72,24 +75,21 @@ class Thumbnail extends Column
                         $url = $this->getImgPath() . 'default/' . self::DEFAULT_IMG;
                     }
                 }
+
                 $item[$fieldName . '_src'] = $url;
-                $item[$fieldName . '_alt'] = $this->getAlt($item) ?: '';
-                /*$item[$fieldName . '_link'] = $this->urlBuilder->getUrl(
-                    'admin_crud/mainController/index',
-                    ['shop_id' => $item['shop_id']]
-                );*/
                 $item[$fieldName . '_orig_src'] = $url;
+                $item[$fieldName . '_link'] = $this->urlBuilder->getUrl(
+                    'store_locator/post/edit',
+                    [
+                        'shop_id' => $shop->getShopId(),
+                    ]
+                );
             }
         }
 
         return $dataSource;
     }
 
-    protected function getAlt($row)
-    {
-        $altField = $this->getData('config/img_url') ?: self::ALT_FIELD;
-        return isset($row[$altField]) ? $row[$altField] : null;
-    }
 
     /**
      * @return string

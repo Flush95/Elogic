@@ -15,7 +15,7 @@ class Delete extends Generic implements ButtonProviderInterface
     {
         return [
             'label' => __('Delete'),
-            'class' => 'delete',
+            'class' => 'scalable delete',
             'on_click' => 'deleteConfirm(\''
                 . __('Are you sure you want to delete this shop?')
                 . '\', \'' . $this->getDeleteUrl() . '\')',
@@ -28,17 +28,7 @@ class Delete extends Generic implements ButtonProviderInterface
      */
     public function getDeleteUrl(): string
     {
-        return $this->getUrl('*/*/delete', ['shop_id' => $this->getShopId()]);
-    }
-
-
-    /**
-     * @return int
-     */
-    public function getShopId(): int
-    {
-        $shop_id = $this->context->getRequestParam('shop_id');
-
-        return $shop_id ? $shop_id : 0;
+        $vendor_id = $this->context->getRequestParam('shop_id');
+        return $this->getUrl('*/*/delete', ['shop_id' => $vendor_id ? $vendor_id : 0]);
     }
 }

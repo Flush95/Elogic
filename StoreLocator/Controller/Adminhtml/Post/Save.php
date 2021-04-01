@@ -2,8 +2,12 @@
 namespace Elogic\StoreLocator\Controller\Adminhtml\Post;
 
 use Elogic\StoreLocator\Helper\Geo;
+use Elogic\StoreLocator\Model\ResourceModel\ShopCollections\ShopProductsCollectionFactory;
 use Elogic\StoreLocator\Model\Shop;
 use Elogic\StoreLocator\Model\ShopFactory;
+use Elogic\StoreLocator\Model\ShopProducts;
+use Elogic\StoreLocator\Model\ShopProductsFactory;
+use Elogic\StoreLocator\Model\ShopProductsRepository;
 use Elogic\StoreLocator\Model\ShopRepository;
 use Exception;
 use Magento\Backend\App\Action;
@@ -33,27 +37,48 @@ class Save extends Action
      * @var ShopFactory
      */
     private ShopFactory $factory;
+    /**
+     * @var ShopProductsFactory
+     */
+    private ShopProductsFactory $productsFactory;
+    /**
+     * @var ShopProductsRepository
+     */
+    private ShopProductsRepository $productsRepository;
+    /**
+     * @var ShopProductsCollectionFactory
+     */
+    private ShopProductsCollectionFactory $productsCollectionFactory;
 
     /**
      * Create constructor.
      * @param Context $context
      * @param Shop $shopModel
-     * @param ShopFactory $factory
      * @param File $file
      * @param Geo $geo
+     * @param ShopFactory $factory
+     * @param ShopProductsFactory $productsFactory
+     * @param ShopProductsRepository $productsRepository
+     * @param ShopProductsCollectionFactory $productsCollectionFactory
      */
     public function __construct(
         Context $context,
         Shop $shopModel,
         File $file,
         Geo $geo,
-        ShopFactory $factory
+        ShopFactory $factory,
+        ShopProductsFactory $productsFactory,
+        ShopProductsRepository $productsRepository,
+        ShopProductsCollectionFactory $productsCollectionFactory
     ) {
         parent::__construct($context);
         $this->shopModel = $shopModel;
         $this->file = $file;
         $this->geo = $geo;
         $this->factory = $factory;
+        $this->productsFactory = $productsFactory;
+        $this->productsRepository = $productsRepository;
+        $this->productsCollectionFactory = $productsCollectionFactory;
     }
 
     /**
@@ -64,6 +89,8 @@ class Save extends Action
         $data = $this->getRequest()->getParams();
 
         $id = isset($data['shop_id']) ? intval($data['shop_id']) : null;
+        $shopProducts = $data['shop_products'];
+
         unset($data['key']);
         unset($data['back']);
         unset($data['form_key']);
@@ -82,10 +109,35 @@ class Save extends Action
                 return $this->_redirect(self::REDIRECT_PATH);
             }
         }
+
         $shop->setData($data);
+
+        if (is_null($shop->getUrlKey())) {
+            $urlKey = preg_replace('#[^0-9a-zа-я]+#iu', '-', $shop->getShopName());
+            $urlKey = strtolower($urlKey);
+            $urlKey = trim($urlKey, '-');
+            $shop->setUrlKey($urlKey);
+        }
 
         try {
             $shopRepository->saveShop($shop);
+
+            // Assign product to shop if it is not present
+            if (isset($shopProducts) && is_array($shopProducts)) {
+                $productsCollection = $this->productsCollectionFactory->create()->addFieldToFilter('shop_id', $shop->getShopId())->load();
+
+                /** @var ShopProducts $product */
+                foreach ($shopProducts as $productId) {
+                    if (is_null($productsCollection->getItemByColumnValue('product_id', $productId))) {
+                        $product = $this->productsFactory->create();
+                        $product->setTableId(null);
+                        $product->setShopId($shop->getShopId());
+                        $product->setProductId($productId);
+                        $this->productsRepository->saveShopProducts($product);
+                    }
+                }
+            }
+
             $this->messageManager->addSuccessMessage(__('Shop %1 have been saved.', $shop->getShopName()));
         } catch (Exception $e) {
             $this->messageManager->addErrorMessage(__('Error occurred when creating shop.'));

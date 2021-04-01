@@ -26,4 +26,33 @@
             <column name="url_key"/>
         </constraint>
     </table>
+
+
+    <table name="shop_products" resource="default" engine="innodb" comment="Shop Products" charset="utf8" collation="utf8_general_ci">
+        <column name="entity_id" xsi:type="int" padding="11" unsigned="true" identity="true" nullable="false"/>
+        <column name="shop_id" xsi:type="int" padding="11" unsigned="true" nullable="false"/>
+        <column name="product_id" xsi:type="int" padding="11" unsigned="true" nullable="false"/>
+
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="entity_id"/>
+        </constraint>
+
+        <constraint xsi:type="foreign"
+                    referenceId="SHOP"
+                    table="shop_products"
+                    column="shop_id"
+                    referenceTable="elogic_shops"
+                    referenceColumn="shop_id"
+                    onDelete="CASCADE"
+        />
+        <constraint xsi:type="foreign"
+                    referenceId="PRODUCT"
+                    table="shop_products"
+                    column="product_id"
+                    referenceTable="catalog_product_entity"
+                    referenceColumn="entity_id"
+                    onDelete="NO ACTION"
+        />
+
+    </table>
 </schema>

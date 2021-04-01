@@ -8,7 +8,6 @@ use Magento\Framework\Event\ObserverInterface;
 class ShopSaveBefore implements ObserverInterface
 {
 
-
     /**
      * @var Geo
      */
@@ -66,5 +65,4 @@ class ShopSaveBefore implements ObserverInterface
             }
         }
     }
-
 }

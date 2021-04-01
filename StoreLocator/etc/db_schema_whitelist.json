@@ -17,7 +17,20 @@
         },
         "constraint": {
             "PRIMARY": true,
-            "ELOGIC_SHOPS_SHOP_NAME": true
+            "ELOGIC_SHOPS_SHOP_NAME": true,
+            "ELOGIC_SHOPS_URL_KEY": true
+        }
+    },
+    "shop_products": {
+        "column": {
+            "entity_id": true,
+            "shop_id": true,
+            "product_id": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "SHOP_PRODUCTS_SHOP_ID_ELOGIC_SHOPS_SHOP_ID": true,
+            "SHOP_PRODUCTS_PRODUCT_ID_CATALOG_PRODUCT_ENTITY_ENTITY_ID": true
         }
     }
 }

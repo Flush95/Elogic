@@ -4,11 +4,14 @@ declare(strict_types=1);
 namespace Elogic\StoreLocator\Observer;
 
 use Elogic\StoreLocator\Model\Shop;
+use Exception;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Event\Observer;
 use Magento\Framework\Event\ObserverInterface;
+use Magento\Store\Api\StoreRepositoryInterface;
 use Magento\UrlRewrite\Model\ResourceModel\UrlRewrite;
-use Magento\UrlRewrite\Model\UrlRewrite as UrlRewriteModel;
 use Magento\UrlRewrite\Model\ResourceModel\UrlRewriteCollection;
+use Magento\UrlRewrite\Model\UrlRewrite as UrlRewriteModel;
 
 class ShopSaveAfter implements ObserverInterface
 {
@@ -51,26 +54,28 @@ class ShopSaveAfter implements ObserverInterface
         /** @var Shop $shop */
         $shop = $observer->getEvent()->getObject();
 
-        if (is_null($shop->getUrlKey())) {
-            $urlKey = preg_replace('#[^0-9a-z]+#i', '-', $shop->getShopName());
-            $urlKey = strtolower($urlKey);
-            $urlKey = trim($urlKey, '-');
-            $shop->setUrlKey($urlKey);
-        }
-
         $rewriteCollection = $this->rewriteCollection->addFieldToFilter(
             'target_path',
             'storelocator/shop/shop/shop_id/' . $shop->getShopId()
         );
 
         if ($rewriteCollection->getSize() == 0) {
-            $this->rewriteModel->setStoreId(1);
+
+            /** @var StoreRepositoryInterface $repository */
+            $repository = ObjectManager::getInstance()->create(StoreRepositoryInterface::class);
+            $stores = $repository->getList();
+            foreach ($stores as $store) {
+                if (str_contains($store->getName(), $shop->getShopName())) {
+                    $this->rewriteModel->setStoreId($store->getId());
+                }
+            }
+
             $this->rewriteModel->setTargetPath('storelocator/shop/shop/shop_id/' . $shop->getShopId());
             $this->rewriteModel->setRequestPath('shops/' . $shop->getUrlKey());
 
             try {
                 $this->rewriteResourceModel->save($this->rewriteModel);
-            } catch (\Exception $e) {
+            } catch (Exception $e) {
                 var_dump($e);
                 die();
             }

@@ -8,7 +8,7 @@ use Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection;
 
 class Collection extends AbstractCollection
 {
-    protected $_idFieldName = 'store_id';
+    protected $_idFieldName = 'shop_id';
 
     protected function _construct()
     {
