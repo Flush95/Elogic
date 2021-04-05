@@ -12,7 +12,7 @@ class ShopView extends Template
     /**
      * @var Http
      */
-    private Http $httpRequest;
+    private $httpRequest;
 
     /**
      * ShopView constructor.

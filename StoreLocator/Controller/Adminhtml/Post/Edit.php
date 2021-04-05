@@ -20,11 +20,11 @@ class Edit extends Action implements HttpGetActionInterface
     /**
      * @var ShopFactory
      */
-    private ShopFactory $shopFactory;
+    private $shopFactory;
     /**
      * @var PageFactory
      */
-    private PageFactory $resultPageFactory;
+    private $resultPageFactory;
 
     public function __construct(
         Context $context,

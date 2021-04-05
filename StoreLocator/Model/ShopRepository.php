@@ -18,19 +18,19 @@ class ShopRepository implements ShopRepositoryInterface
     /**
      * @var ShopResource
      */
-    private ShopResource $shop;
+    private $shop;
     /**
      * @var ShopFactory
      */
-    private ShopFactory $shopFactory;
+    private $shopFactory;
     /**
      * @var CollectionFactory
      */
-    private CollectionFactory $shops;
+    private $shops;
     /**
      * @var ImageLinkBuilder
      */
-    private ImageLinkBuilder $linkBuilder;
+    private $linkBuilder;
 
     /**
      * ShopRepository constructor.

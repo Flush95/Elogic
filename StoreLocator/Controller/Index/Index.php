@@ -7,7 +7,7 @@ use Magento\Framework\View\Result\PageFactory;
 
 class Index implements ActionInterface
 {
-    protected PageFactory $pageFactory;
+    protected $pageFactory;
 
     /**
      * Index constructor.

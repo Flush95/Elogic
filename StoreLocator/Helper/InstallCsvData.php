@@ -13,21 +13,21 @@ class InstallCsvData implements DataPatchInterface, PatchVersionInterface
     /**
      * @var ModuleDataSetupInterface
      */
-    private ModuleDataSetupInterface $moduleDataSetup;
+    private $moduleDataSetup;
 
     /**
      * @var Csv
      */
-    private Csv $csv;
+    private $csv;
 
     /**
      * @var string
      */
-    private string $csvFilePath = "";
+    private $csvFilePath = "";
     /**
      * @var Geo
      */
-    private Geo $geo;
+    private $geo;
 
     /**
      * InstallCsvData constructor.

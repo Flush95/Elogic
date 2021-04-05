@@ -20,11 +20,11 @@ class MassDelete extends Action
     /**
      * @var Filter
      */
-    private Filter $filter;
+    private $filter;
     /**
      * @var CollectionFactory
      */
-    private CollectionFactory $collectionFactory;
+    private $collectionFactory;
 
     /**
      * MassDelete constructor.

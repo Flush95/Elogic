@@ -19,15 +19,15 @@ class Thumbnail extends Column
     /**
      * @var StoreManagerInterface
      */
-    protected StoreManagerInterface $storeManager;
+    protected $storeManager;
     /**
      * @var Image
      */
-    private Image $imageHelper;
+    private $imageHelper;
     /**
      * @var UrlInterface
      */
-    private UrlInterface $urlBuilder;
+    private $urlBuilder;
 
     /**
      * Thumbnail constructor.

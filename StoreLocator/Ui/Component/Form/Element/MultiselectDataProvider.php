@@ -12,7 +12,7 @@ class MultiselectDataProvider implements \Magento\Framework\Data\OptionSourceInt
     /**
      * @var CollectionFactory
      */
-    private CollectionFactory $collectionFactory;
+    private $collectionFactory;
 
     public function __construct(CollectionFactory $collectionFactory)
     {

@@ -8,7 +8,7 @@ class Geo
     /**
      * @var Data
      */
-    private Data $data;
+    private $data;
 
     /**
      * Geo constructor.

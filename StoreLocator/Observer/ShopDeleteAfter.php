@@ -14,11 +14,11 @@ class ShopDeleteAfter implements ObserverInterface
     /**
      * @var UrlRewriteCollection
      */
-    private UrlRewriteCollection $rewriteCollection;
+    private $rewriteCollection;
     /**
      * @var UrlRewrite
      */
-    private UrlRewrite $urlRewrite;
+    private $urlRewrite;
 
     /**
      * ShopDeleteAfter constructor.

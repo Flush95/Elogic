@@ -21,7 +21,7 @@ class InlineEdit extends Action
     /**
      * @var JsonFactory
      */
-    private JsonFactory $jsonFactory;
+    private $jsonFactory;
     private $logger;
 
     /**

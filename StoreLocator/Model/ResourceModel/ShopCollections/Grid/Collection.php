@@ -21,7 +21,7 @@ class Collection extends MainCollection implements SearchResultInterface
     /**
      * @var AggregationInterface
      */
-    protected AggregationInterface $aggregations;
+    protected $aggregations;
 
     /**
      * Collection constructor.

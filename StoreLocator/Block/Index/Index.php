@@ -19,15 +19,15 @@ class Index extends Template
     /**
      * @var StoreManagerInterface
      */
-    private StoreManagerInterface $storeManager;
+    private $storeManager;
     /**
      * @var CollectionFactory
      */
-    private CollectionFactory $collectionFactory;
+    private $collectionFactory;
     /**
      * @var ImageLinkBuilder
      */
-    public ImageLinkBuilder $linkBuilder;
+    public $linkBuilder;
 
     /**
      * CRUD constructor.

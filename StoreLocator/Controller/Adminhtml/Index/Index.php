@@ -17,11 +17,11 @@ class Index extends Action
     /**
      * @var PageFactory
      */
-    protected PageFactory $pageFactory;
+    protected $pageFactory;
     /**
      * @var Data
      */
-    private Data $data;
+    private $data;
 
     public function __construct(Context $context, PageFactory $pageFactory, Data $data)
     {

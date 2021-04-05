@@ -13,11 +13,11 @@ use Magento\Framework\Controller\ResultInterface;
 
 class Upload extends Action
 {
-    public ImageUploader $imageUploader;
+    public $imageUploader;
     /**
      * @var JsonFactory
      */
-    private JsonFactory $jsonFactory;
+    private $jsonFactory;
 
     /**
      * Upload constructor.

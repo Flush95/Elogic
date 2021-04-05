@@ -11,7 +11,7 @@ class ShopSaveBefore implements ObserverInterface
     /**
      * @var Geo
      */
-    private Geo $geoCoordinates;
+    private $geoCoordinates;
 
     /**
      * ShopSaveBefore constructor.

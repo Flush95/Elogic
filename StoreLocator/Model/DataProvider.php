@@ -18,15 +18,15 @@ class DataProvider extends AbstractDataProvider
     /**
      * @var array
      */
-    protected array $_loadedData;
+    protected $_loadedData;
     /**
      * @var Filesystem
      */
-    private Filesystem $filesystem;
+    private $filesystem;
     /**
      * @var StoreManagerInterface
      */
-    private StoreManagerInterface $storeManager;
+    private $storeManager;
 
     /**
      * @param  $name

@@ -19,15 +19,15 @@ class ShopSaveAfter implements ObserverInterface
     /**
      * @var UrlRewrite
      */
-    private UrlRewrite $rewriteResourceModel;
+    private $rewriteResourceModel;
     /**
      * @var UrlRewriteCollection
      */
-    private UrlRewriteCollection $rewriteCollection;
+    private $rewriteCollection;
     /**
      * @var UrlRewriteModel
      */
-    private UrlRewriteModel $rewriteModel;
+    private $rewriteModel;
 
     /**
      * ShopSaveAfter constructor.

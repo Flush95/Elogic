@@ -8,7 +8,7 @@ use Magento\Ui\Component\Listing\Columns\Column;
 
 class ShopActions extends Column
 {
-    protected UrlInterface $urlBuilder;
+    protected $urlBuilder;
 
     public function __construct(ContextInterface $context, UiComponentFactory $uiComponentFactory, UrlInterface $urlBuilder, array $components=[], array $data=[])
     {

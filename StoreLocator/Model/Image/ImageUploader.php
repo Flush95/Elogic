@@ -7,7 +7,6 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Exception\FileSystemException;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
-use Magento\Framework\File\Uploader;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Directory\WriteInterface;
 use Magento\Framework\UrlInterface;
@@ -22,35 +21,35 @@ class ImageUploader
     /**
      * @var Database
      */
-    private Database $coreFileStorageDatabase;
+    private $coreFileStorageDatabase;
     /**
      * @var WriteInterface
      */
-    private WriteInterface $mediaDirectory;
+    private $mediaDirectory;
     /**
      * @var UploaderFactory
      */
-    private UploaderFactory $uploaderFactory;
+    private $uploaderFactory;
     /**
      * @var StoreManagerInterface
      */
-    private StoreManagerInterface $storeManager;
+    private $storeManager;
     /**
      * @var LoggerInterface
      */
-    private LoggerInterface $logger;
+    private $logger;
     /**
      * @var string
      */
-    public string $baseTmpPath;
+    public $baseTmpPath;
     /**
      * @var string
      */
-    public string $basePath;
+    public $basePath;
     /**
      * @var array
      */
-    public array $allowedExtensions;
+    public $allowedExtensions;
     private $renameFile;
 
     /**
@@ -171,6 +170,7 @@ class ImageUploader
      * @return array|bool
      * @throws LocalizedException
      * @throws NoSuchEntityException
+     * @throws Exception
      */
     public function saveFileToTmpDir($fileId)
     {

@@ -9,8 +9,8 @@ use Magento\Framework\View\Result\PageFactory;
 
 class Shop implements ActionInterface
 {
-    protected PageFactory $pageFactory;
-    private Http $httpRequest;
+    protected $pageFactory;
+    private $httpRequest;
 
     /**
      * Index constructor.

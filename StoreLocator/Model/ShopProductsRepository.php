@@ -16,11 +16,11 @@ class ShopProductsRepository
     /**
      * @var ShopProductsInterface
      */
-    private ShopProductsInterface $shopProducts;
+    private $shopProducts;
     /**
      * @var ShopProductsResource
      */
-    private ShopProductsResource $productsResource;
+    private $productsResource;
 
     /**
      * ShopProductsRepository constructor.

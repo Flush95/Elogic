@@ -13,15 +13,15 @@ class Product extends Template
     /**
      * @var Template\Context
      */
-    private Template\Context $context;
+    private $context;
     /**
      * @var ShopProductsCollectionFactory
      */
-    private ShopProductsCollectionFactory $collectionFactory;
+    private $collectionFactory;
     /**
      * @var ShopRepository
      */
-    private ShopRepository $shopRepository;
+    private $shopRepository;
 
     /**
      * Product constructor.

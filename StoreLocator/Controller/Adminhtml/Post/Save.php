@@ -24,31 +24,31 @@ class Save extends Action
     /**
      * @var Shop
      */
-    private Shop $shopModel;
+    private $shopModel;
     /**
      * @var File
      */
-    private File $file;
+    private $file;
     /**
      * @var Geo
      */
-    private Geo $geo;
+    private $geo;
     /**
      * @var ShopFactory
      */
-    private ShopFactory $factory;
+    private $factory;
     /**
      * @var ShopProductsFactory
      */
-    private ShopProductsFactory $productsFactory;
+    private $productsFactory;
     /**
      * @var ShopProductsRepository
      */
-    private ShopProductsRepository $productsRepository;
+    private $productsRepository;
     /**
      * @var ShopProductsCollectionFactory
      */
-    private ShopProductsCollectionFactory $productsCollectionFactory;
+    private $productsCollectionFactory;
 
     /**
      * Create constructor.
