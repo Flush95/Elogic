@@ -67,6 +67,10 @@ class ShopSaveAfter implements ObserverInterface
             foreach ($stores as $store) {
                 if (str_contains($store->getName(), $shop->getShopName())) {
                     $this->rewriteModel->setStoreId($store->getId());
+                } else {
+                    $objectManager =  ObjectManager::getInstance();
+                    $storeManager  = $objectManager->get('\Magento\Store\Model\StoreManagerInterface');
+                    $this->rewriteModel->setStoreId($storeManager->getStore()->getStoreId());
                 }
             }
 
