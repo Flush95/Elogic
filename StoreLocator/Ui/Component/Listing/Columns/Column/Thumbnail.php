@@ -15,7 +15,7 @@ class Thumbnail extends Column
 {
     const ROUTE_PATH = 'store_locator/mainController/index';
     const DEFAULT_IMG = 'default.png';
-    const PUB_MEDIA_PATH = 'pub/media/images/';
+    const PUB_MEDIA_PATH = 'media/images/';
     /**
      * @var StoreManagerInterface
      */
@@ -69,6 +69,7 @@ class Thumbnail extends Column
                 $shop = new DataObject($item);
                 $url = '';
                 $fileName = $item[$fieldName];
+
                 if ($fileName != '') {
                     $url = $this->getImgPath() . $fileName;
                     if (!file_exists(self::PUB_MEDIA_PATH . $fileName)) {
