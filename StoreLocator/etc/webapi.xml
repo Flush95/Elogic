@@ -3,19 +3,19 @@
     <route url="/V2/shop/getShopById/:id" method="GET">
         <service class="Elogic\StoreLocator\Api\ShopRepositoryInterface" method="getShopById"/>
         <resources>
-            <resource ref="anonymous"/>
+            <resource ref="self"/>
         </resources>
     </route>
     <route url="/V2/shop/getShopByUrlKey/:url_key" method="GET">
         <service class="Elogic\StoreLocator\Api\ShopRepositoryInterface" method="getShopByUrlKey"/>
         <resources>
-            <resource ref="anonymous"/>
+            <resource ref="self"/>
         </resources>
     </route>
     <route url="/V2/shop/getAllShops" method="GET">
         <service class="Elogic\StoreLocator\Api\ShopRepositoryInterface" method="getAllShops"/>
         <resources>
-            <resource ref="anonymous"/>
+            <resource ref="self"/>
         </resources>
     </route>
 </routes>

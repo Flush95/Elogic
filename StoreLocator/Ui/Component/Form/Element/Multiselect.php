@@ -2,12 +2,32 @@
 
 namespace Elogic\StoreLocator\Ui\Component\Form\Element;
 
-use Elogic\StoreLocator\Model\ResourceModel\ShopCollections\ShopProductsCollection;
-use Magento\Framework\App\ObjectManager;
+use Elogic\StoreLocator\Model\ResourceModel\ShopCollections\ShopProductsCollectionFactory;
+use Magento\Framework\View\Element\UiComponent\ContextInterface;
+use Magento\Framework\View\Element\UiComponent\DataProvider\Sanitizer;
 
 class Multiselect extends \Magento\Ui\Component\Form\Element\MultiSelect
 {
     const FIELD_NAME = 'shop_products';
+    /**
+     * @var ShopProductsCollectionFactory
+     */
+    private $collectionFactory;
+
+    /**
+     * Multiselect constructor.
+     * @param ContextInterface $context
+     * @param ShopProductsCollectionFactory $collectionFactory
+     * @param null $options
+     * @param array $components
+     * @param array $data
+     * @param Sanitizer|null $sanitizer
+     */
+    public function __construct(ContextInterface $context, ShopProductsCollectionFactory $collectionFactory, $options = null, array $components = [], array $data = [], ?Sanitizer $sanitizer = null)
+    {
+        parent::__construct($context, $options, $components, $data, $sanitizer);
+        $this->collectionFactory = $collectionFactory;
+    }
 
     /**
      * Prepare component configuration
@@ -21,8 +41,7 @@ class Multiselect extends \Magento\Ui\Component\Form\Element\MultiSelect
         $config = $this->getData('config');
         $shop_id = $this->context->getRequestParam('shop_id');
 
-        /** @var ShopProductsCollection $selectedProductsCollection */
-        $selectedProductsCollection = ObjectManager::getInstance()->create(ShopProductsCollection::class);
+        $selectedProductsCollection = $this->collectionFactory->create();
         $selectedProductsCollection->addFieldToFilter('shop_id', $shop_id)->addFieldToSelect('product_id')->load();
 
         $defaultValues = [];

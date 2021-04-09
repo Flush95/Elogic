@@ -6,10 +6,7 @@ namespace Elogic\StoreLocator\Block\Index;
 
 use Elogic\StoreLocator\Helper\ImageLinkBuilder;
 use Elogic\StoreLocator\Model\ResourceModel\ShopCollections\CollectionFactory;
-use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\LocalizedException;
-use Magento\Framework\Exception\NoSuchEntityException;
-use Magento\Framework\UrlInterface;
 use Magento\Framework\View\Element\Template;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Theme\Block\Html\Pager;
@@ -28,6 +25,10 @@ class Index extends Template
      * @var ImageLinkBuilder
      */
     public $linkBuilder;
+    /**
+     * @var CollectionFactory
+     */
+    private $shopCollectionFactory;
 
     /**
      * CRUD constructor.
@@ -35,16 +36,23 @@ class Index extends Template
      * @param CollectionFactory $collectionFactory
      * @param Template\Context $context
      * @param StoreManagerInterface $storeManager
+     * @param CollectionFactory $shopCollectionFactory
      * @param array $data
      */
-    public function __construct(ImageLinkBuilder $linkBuilder, CollectionFactory $collectionFactory, Template\Context $context, StoreManagerInterface $storeManager, array $data = [])
-    {
+    public function __construct(
+        ImageLinkBuilder $linkBuilder,
+        CollectionFactory $collectionFactory,
+        Template\Context $context,
+        StoreManagerInterface $storeManager,
+        CollectionFactory $shopCollectionFactory,
+        array $data = []
+    ) {
         parent::__construct($context, $data);
         $this->storeManager = $storeManager;
         $this->collectionFactory = $collectionFactory;
         $this->linkBuilder = $linkBuilder;
+        $this->shopCollectionFactory = $shopCollectionFactory;
     }
-
 
     /**
      * @return $this
@@ -63,7 +71,8 @@ class Index extends Template
                 $this->setChild('pager', $pager);
                 $this->getAllShops()->load();
             } catch (LocalizedException $e) {
-                //
+                var_dump($e->getMessage());
+                die();
             }
         }
         return $this;
@@ -73,7 +82,7 @@ class Index extends Template
     {
         $page = $this->getRequest()->getParam('current_page') ? $this->getRequest()->getParam('current_page') : 1;
         $searchValue = $this->getRequest()->getParam('search');
-        $collection = ObjectManager::getInstance()->create('Elogic\StoreLocator\Model\ResourceModel\ShopCollections\Collection');
+        $collection = $this->collectionFactory->create();
 
         if (!is_null($searchValue)) {
             $collection->addFieldToFilter(
@@ -81,9 +90,11 @@ class Index extends Template
                 ['like' => '%' . $searchValue . '%'],
             );
         }
+
         $collection->setOrder('shop_id', 'ASC');
         $collection->setPageSize(3);
         $collection->setCurPage($page);
+
         return $collection;
     }
 

@@ -11,7 +11,7 @@ class Data extends AbstractHelper
      */
     public function getApiKey()
     {
-        return $this->scopeConfig->getValue('admin_config_api/general/api_key', \Magento\Store\Model\ScopeInterface::SCOPE_STORE);
+        return $this->scopeConfig->getValue('admin_config_api/general/api_key');
     }
 
     /**
@@ -19,6 +19,6 @@ class Data extends AbstractHelper
      */
     public function getModuleStatus()
     {
-        return $this->scopeConfig->getValue('admin_config_module_status/general/enable', \Magento\Store\Model\ScopeInterface::SCOPE_STORE);
+        return $this->scopeConfig->getValue('admin_config_module_status/general/enable');
     }
 }

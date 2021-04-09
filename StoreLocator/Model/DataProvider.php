@@ -4,7 +4,6 @@ namespace Elogic\StoreLocator\Model;
 use Elogic\StoreLocator\Model\ResourceModel\ShopCollections\CollectionFactory;
 use Magento\Catalog\Model\Session;
 use Magento\Framework\App\Filesystem\DirectoryList;
-use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Filesystem;
 use Magento\Framework\UrlInterface;
@@ -27,14 +26,19 @@ class DataProvider extends AbstractDataProvider
      * @var StoreManagerInterface
      */
     private $storeManager;
+    /**
+     * @var Session
+     */
+    private $session;
 
     /**
-     * @param  $name
-     * @param  $primaryFieldName
-     * @param  $requestFieldName
+     * @param string $name
+     * @param string $primaryFieldName
+     * @param string $requestFieldName
      * @param CollectionFactory $storeCollectionFactory
      * @param Filesystem $filesystem
      * @param StoreManagerInterface $storeManager
+     * @param Session $session
      * @param array $meta
      * @param array $data
      */
@@ -45,6 +49,7 @@ class DataProvider extends AbstractDataProvider
         CollectionFactory $storeCollectionFactory,
         Filesystem $filesystem,
         StoreManagerInterface $storeManager,
+        Session $session,
         array $meta = [],
         array $data = []
     ) {
@@ -52,8 +57,8 @@ class DataProvider extends AbstractDataProvider
         parent::__construct($name, $primaryFieldName, $requestFieldName, $meta, $data);
         $this->filesystem = $filesystem;
         $this->storeManager = $storeManager;
+        $this->session = $session;
     }
-
 
     /**
      * @return array
@@ -84,18 +89,16 @@ class DataProvider extends AbstractDataProvider
 
                 $shop['img_url'] = [$img];
                 $this->_loadedData[$shop->getShopId()] = $shop->getData();
-
             }
             return $this->_loadedData;
         }
-        $objectManager = ObjectManager::getInstance();
-        /** @var Session $session */
-        $session = $objectManager->create('\Magento\Catalog\Model\Session');
-        if (!$model = $session->getModel()) {
+
+        if (!$model = $this->session->getModel()) {
+            /** @var Shop $emptyShop */
             $emptyShop = $this->collection->getNewEmptyItem();
             $emptyShop->setData($model);
             $this->_loadedData[$emptyShop->getShopId()] = $emptyShop->getData();
-            $session->unsModel();
+            $this->session->unsModel();
             return $this->_loadedData;
         }
         return [];

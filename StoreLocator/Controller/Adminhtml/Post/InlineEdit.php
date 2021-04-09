@@ -1,8 +1,9 @@
 <?php
 namespace Elogic\StoreLocator\Controller\Adminhtml\Post;
 
+use Elogic\StoreLocator\Api\ShopRepositoryInterface;
+use Elogic\StoreLocator\Api\Data\ShopInterface;
 use Elogic\StoreLocator\Model\Shop;
-use Elogic\StoreLocator\Model\ShopRepository;
 use Exception;
 use Magento\Backend\App\Action;
 use Magento\Backend\App\Action\Context;
@@ -10,11 +11,8 @@ use Magento\Framework\App\ResponseInterface;
 use Magento\Framework\Controller\Result\Json;
 use Magento\Framework\Controller\Result\JsonFactory;
 use Magento\Framework\Controller\ResultInterface;
-use Psr\Log\LoggerInterface;
 
-/**
- * Class Index
- */
+
 class InlineEdit extends Action
 {
 
@@ -22,19 +20,22 @@ class InlineEdit extends Action
      * @var JsonFactory
      */
     private $jsonFactory;
-    private $logger;
+    /**
+     * @var ShopRepositoryInterface
+     */
+    private $shopRepository;
 
     /**
      * InlineEdit constructor.
      * @param Context $context
      * @param JsonFactory $jsonFactory
-     * @param LoggerInterface $logger
+     * @param ShopRepositoryInterface $shopRepository
      */
-    public function __construct(Context $context, JsonFactory $jsonFactory, LoggerInterface $logger)
+    public function __construct(Context $context, JsonFactory $jsonFactory, ShopRepositoryInterface $shopRepository)
     {
         parent::__construct($context);
         $this->jsonFactory = $jsonFactory;
-        $this->logger = $logger;
+        $this->shopRepository = $shopRepository;
     }
 
     /**
@@ -46,9 +47,6 @@ class InlineEdit extends Action
         $error = false;
         $messages = [];
 
-        $this->logger->info(json_encode($this->getRequest()->getParams()));
-        $this->logger->debug(json_encode($this->getRequest()->getParams()));
-
         if ($this->getRequest()->getParam('isAjax')) {
             $postItems = $this->getRequest()->getParam('items', []);
 
@@ -56,20 +54,20 @@ class InlineEdit extends Action
                 $messages[] = __('Please correct data');
                 $error = true;
             } else {
+
                 foreach (array_keys($postItems) as $model_id) {
 
-                    /** @var ShopRepository $shopRepository */
-                    $shopRepository = $this->_objectManager->create('Elogic\StoreLocator\Model\ShopRepository');
-
                     try {
-                        /** @var Shop $model */
-                        $model = $shopRepository->getShopById($model_id);
-                        $model->setData(array_merge($model->getData(), $postItems[$model_id]));
-                        $shopRepository->saveShop($model);
+                        /** @var Shop $shop */
+                        $shop = $this->shopRepository->getShopById($model_id);
+                        $shop->setData(array_merge($shop->getData(), $postItems[$model_id]));
+                        $this->shopRepository->saveShop($shop);
+                        $messages[] = __('Changes in ' . $shop->getShopName() . ' have been saved');
                     } catch (Exception $e) {
                         $messages[] = "[ID: {$model_id}]  {$e->getMessage()}";
                         $error = true;
                     }
+
                 }
             }
         }

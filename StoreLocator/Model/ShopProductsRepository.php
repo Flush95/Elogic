@@ -4,13 +4,14 @@ declare(strict_types=1);
 namespace Elogic\StoreLocator\Model;
 
 use Elogic\StoreLocator\Api\Data\ShopProductsInterface;
+use Elogic\StoreLocator\Api\ShopProductsRepositoryInterface;
 use Elogic\StoreLocator\Model\ResourceModel\ShopProductsResource;
 use Magento\Framework\Exception\AlreadyExistsException;
 use Magento\Framework\Exception\CouldNotDeleteException;
 use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\Exception\NoSuchEntityException;
 
-class ShopProductsRepository
+class ShopProductsRepository implements ShopProductsRepositoryInterface
 {
 
     /**
@@ -24,10 +25,10 @@ class ShopProductsRepository
 
     /**
      * ShopProductsRepository constructor.
-     * @param ShopProductsInterface $shopProducts
+     * @param ShopProductsFactory $shopProducts
      * @param ShopProductsResource $productsResource
      */
-    public function __construct(ShopProductsInterface $shopProducts, ShopProductsResource $productsResource)
+    public function __construct(ShopProductsFactory $shopProducts, ShopProductsResource $productsResource)
     {
         $this->shopProducts = $shopProducts;
         $this->productsResource = $productsResource;
@@ -38,9 +39,9 @@ class ShopProductsRepository
      * @return ShopProducts
      * @throws NoSuchEntityException
      */
-    public function getShopProductById(int $id): ShopProducts
+    public function getShopProductById(int $id): ShopProductsInterface
     {
-        $shopProducts = $this->productsResource->create();
+        $shopProducts = $this->shopProducts->create();
         $this->productsResource->load($shopProducts, $id);
 
         if (!$shopProducts->getTableId()) {
@@ -54,7 +55,7 @@ class ShopProductsRepository
      * @return ShopProducts
      * @throws CouldNotSaveException
      */
-    public function saveShopProducts(ShopProductsInterface $shopProducts): ShopProducts
+    public function saveShopProducts(ShopProductsInterface $shopProducts): ShopProductsInterface
     {
         /** @var ShopProducts $shopProducts */
         try {

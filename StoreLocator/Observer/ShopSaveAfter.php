@@ -5,7 +5,6 @@ namespace Elogic\StoreLocator\Observer;
 
 use Elogic\StoreLocator\Model\Shop;
 use Exception;
-use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Event\Observer;
 use Magento\Framework\Event\ObserverInterface;
 use Magento\Store\Api\StoreRepositoryInterface;
@@ -28,26 +27,41 @@ class ShopSaveAfter implements ObserverInterface
      * @var UrlRewriteModel
      */
     private $rewriteModel;
+    /**
+     * @var StoreRepositoryInterface
+     */
+    private $storeRepository;
+    /**
+     * @var \Magento\Store\Model\StoreManagerInterface
+     */
+    private $storeManager;
 
     /**
      * ShopSaveAfter constructor.
      * @param UrlRewrite $rewriteResourceModel
      * @param UrlRewriteCollection $rewriteCollection
      * @param UrlRewriteModel $rewriteModel
+     * @param StoreRepositoryInterface $storeRepository
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      */
     public function __construct(
         UrlRewrite $rewriteResourceModel,
         UrlRewriteCollection $rewriteCollection,
-        UrlRewriteModel $rewriteModel
+        UrlRewriteModel $rewriteModel,
+        StoreRepositoryInterface $storeRepository,
+        \Magento\Store\Model\StoreManagerInterface $storeManager
     ) {
         $this->rewriteResourceModel = $rewriteResourceModel;
         $this->rewriteCollection = $rewriteCollection;
         $this->rewriteModel = $rewriteModel;
+        $this->storeRepository = $storeRepository;
+        $this->storeManager = $storeManager;
     }
 
     /**
      * @param Observer $observer
      * @return void
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     public function execute(Observer $observer)
     {
@@ -61,16 +75,12 @@ class ShopSaveAfter implements ObserverInterface
 
         if ($rewriteCollection->getSize() == 0) {
 
-            /** @var StoreRepositoryInterface $repository */
-            $repository = ObjectManager::getInstance()->create(StoreRepositoryInterface::class);
-            $stores = $repository->getList();
+            $stores = $this->storeRepository->getList();
             foreach ($stores as $store) {
                 if (str_contains($store->getName(), $shop->getShopName())) {
                     $this->rewriteModel->setStoreId($store->getId());
                 } else {
-                    $objectManager =  ObjectManager::getInstance();
-                    $storeManager  = $objectManager->get('\Magento\Store\Model\StoreManagerInterface');
-                    $this->rewriteModel->setStoreId($storeManager->getStore()->getStoreId());
+                    $this->rewriteModel->setStoreId($this->storeManager->getStore()->getStoreId());
                 }
             }
 

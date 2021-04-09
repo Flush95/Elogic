@@ -31,17 +31,14 @@ class ShopSaveBefore implements ObserverInterface
         if (!$shop) {
             return;
         }
-
         $latitude = $shop->getLatitude();
         $longitude = $shop->getLongitude();
         $geolocation = null;
+
         if (empty($latitude || $longitude) || $latitude == 0 || $longitude == 0) {
-            $geolocation = $this->geoCoordinates->getCoordinates(
-                $shop->getShopState() . '+' .
-                $shop->getShopCity() . '+' .
-                $shop->getShopAddress()
-            );
+            $geolocation = $this->geoCoordinates->getCoordinates($this->joinAddress($shop));
         }
+
         if ($shop->isObjectNew() && !is_null($geolocation)) {
             $shop->setLatitude(doubleval($geolocation['latitude']));
             $shop->setLongitude(doubleval($geolocation['longitude']));
@@ -55,14 +52,19 @@ class ShopSaveBefore implements ObserverInterface
                 array_key_exists('shop_city', $changes) ||
                 array_key_exists('shop_state', $changes)
             ) {
-                $geolocation = $this->geoCoordinates->getCoordinates(
-                    $shop->getShopState() . '+' .
-                    $shop->getShopCity() . '+' .
-                    $shop->getShopAddress()
-                );
+                $geolocation = $this->geoCoordinates->getCoordinates($this->joinAddress($shop));
                 $shop->setLatitude(floatval($geolocation['latitude']));
                 $shop->setLongitude(floatval($geolocation['longitude']));
             }
         }
+    }
+
+    /**
+     * @param $shop
+     * @return string
+     */
+    private function joinAddress($shop): string
+    {
+        return $shop->getShopState() . '+' . $shop->getShopCity() . '+' . $shop->getShopAddress();
     }
 }

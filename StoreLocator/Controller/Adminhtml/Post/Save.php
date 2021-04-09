@@ -1,34 +1,24 @@
 <?php
 namespace Elogic\StoreLocator\Controller\Adminhtml\Post;
 
+use Elogic\StoreLocator\Api\ShopProductsRepositoryInterface;
+use Elogic\StoreLocator\Api\ShopRepositoryInterface;
 use Elogic\StoreLocator\Helper\Geo;
 use Elogic\StoreLocator\Model\ResourceModel\ShopCollections\ShopProductsCollectionFactory;
-use Elogic\StoreLocator\Model\Shop;
 use Elogic\StoreLocator\Model\ShopFactory;
 use Elogic\StoreLocator\Model\ShopProducts;
 use Elogic\StoreLocator\Model\ShopProductsFactory;
-use Elogic\StoreLocator\Model\ShopProductsRepository;
-use Elogic\StoreLocator\Model\ShopRepository;
 use Exception;
 use Magento\Backend\App\Action;
 use Magento\Backend\App\Action\Context;
-use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\ResponseInterface;
 use Magento\Framework\Controller\ResultInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
-use Magento\Framework\Filesystem\Driver\File;
 
 class Save extends Action
 {
     private const REDIRECT_PATH = 'store_locator/index/index';
-    /**
-     * @var Shop
-     */
-    private $shopModel;
-    /**
-     * @var File
-     */
-    private $file;
+
     /**
      * @var Geo
      */
@@ -36,49 +26,50 @@ class Save extends Action
     /**
      * @var ShopFactory
      */
-    private $factory;
+    private $shopFactory;
     /**
      * @var ShopProductsFactory
      */
     private $productsFactory;
     /**
-     * @var ShopProductsRepository
+     * @var ShopProductsRepositoryInterface
      */
     private $productsRepository;
     /**
      * @var ShopProductsCollectionFactory
      */
     private $productsCollectionFactory;
+    /**
+     * @var ShopRepositoryInterface
+     */
+    private $shopRepository;
 
     /**
      * Create constructor.
      * @param Context $context
-     * @param Shop $shopModel
-     * @param File $file
      * @param Geo $geo
-     * @param ShopFactory $factory
+     * @param ShopFactory $shopFactory
      * @param ShopProductsFactory $productsFactory
-     * @param ShopProductsRepository $productsRepository
+     * @param ShopRepositoryInterface $shopRepository
+     * @param ShopProductsRepositoryInterface $productsRepository
      * @param ShopProductsCollectionFactory $productsCollectionFactory
      */
     public function __construct(
         Context $context,
-        Shop $shopModel,
-        File $file,
         Geo $geo,
-        ShopFactory $factory,
+        ShopFactory $shopFactory,
         ShopProductsFactory $productsFactory,
-        ShopProductsRepository $productsRepository,
+        ShopRepositoryInterface $shopRepository,
+        ShopProductsRepositoryInterface $productsRepository,
         ShopProductsCollectionFactory $productsCollectionFactory
     ) {
         parent::__construct($context);
-        $this->shopModel = $shopModel;
-        $this->file = $file;
         $this->geo = $geo;
-        $this->factory = $factory;
+        $this->shopFactory = $shopFactory;
         $this->productsFactory = $productsFactory;
         $this->productsRepository = $productsRepository;
         $this->productsCollectionFactory = $productsCollectionFactory;
+        $this->shopRepository = $shopRepository;
     }
 
     /**
@@ -97,13 +88,11 @@ class Save extends Action
         $fileName = $data['img_url'][0]['name'];
         $data['img_url'] = $fileName;
 
-        /** @var ShopRepository $shopRepository */
-        $shopRepository = ObjectManager::getInstance()->get(ShopRepository::class);
 
-        $shop = $this->factory->create();
+        $shop = $this->shopFactory->create();
         if ($id != null) {
             try {
-                $shop = $shopRepository->getShopById($id);
+                $shop = $this->shopRepository->getShopById($id);
             } catch (NoSuchEntityException $e) {
                 $this->messageManager->addErrorMessage(__('Error occurred when creating shop.'));
                 return $this->_redirect(self::REDIRECT_PATH);
@@ -120,11 +109,12 @@ class Save extends Action
         }
 
         try {
-            $shopRepository->saveShop($shop);
+            $this->shopRepository->saveShop($shop);
 
             // Assign product to shop if it is not present
             if (isset($shopProducts) && is_array($shopProducts)) {
-                $productsCollection = $this->productsCollectionFactory->create()->addFieldToFilter('shop_id', $shop->getShopId())->load();
+                $productsCollection = $this->productsCollectionFactory->create();
+                $productsCollection->addFieldToFilter('shop_id', $shop->getShopId())->load();
 
                 /** @var ShopProducts $product */
                 foreach ($shopProducts as $productId) {

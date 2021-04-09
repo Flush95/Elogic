@@ -25,14 +25,10 @@ class MultiselectDataProvider implements \Magento\Framework\Data\OptionSourceInt
     public function toOptionArray(): array
     {
         $productsCollection = $this->collectionFactory->create();
-
-        $this->productCollection = $productsCollection
-                ->addAttributeToSelect('*')
-                ->load();
+        $this->productCollection = $productsCollection->addAttributeToSelect('*')->load();
         if (!$this->_options) {
             $this->_options = $this->productCollection->toOptionArray();
         }
-
         return $this->_options;
     }
 

@@ -26,7 +26,7 @@ class ShopRepository implements ShopRepositoryInterface
     /**
      * @var CollectionFactory
      */
-    private $shops;
+    private $shopsFactory;
     /**
      * @var ImageLinkBuilder
      */
@@ -36,18 +36,18 @@ class ShopRepository implements ShopRepositoryInterface
      * ShopRepository constructor.
      * @param ShopResource $shop
      * @param ShopFactory $shopFactory
-     * @param CollectionFactory $shops
+     * @param CollectionFactory $shopsFactory
      * @param ImageLinkBuilder $linkBuilder
      */
     public function __construct(
         ShopResource $shop,
         ShopFactory $shopFactory,
-        CollectionFactory $shops,
+        CollectionFactory $shopsFactory,
         ImageLinkBuilder $linkBuilder
     ) {
         $this->shop = $shop;
         $this->shopFactory = $shopFactory;
-        $this->shops = $shops;
+        $this->shopsFactory = $shopsFactory;
         $this->linkBuilder = $linkBuilder;
     }
 
@@ -133,7 +133,7 @@ class ShopRepository implements ShopRepositoryInterface
      */
     public function getAllShops(): ?array
     {
-        $collection = $this->shops->create();
+        $collection = $this->shopsFactory->create();
         /** @var Shop $shop */
         foreach ($collection->getItems() as $shop) {
             $shop->setImgUrl($this->linkBuilder->getImgLink($shop->getImgUrl()));

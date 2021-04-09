@@ -3,8 +3,11 @@ declare(strict_types=1);
 
 namespace Elogic\StoreLocator\Block\Shop;
 
-use Elogic\StoreLocator\Model\ResourceModel\ShopCollections\ShopProductsCollectionFactory;
+use Elogic\StoreLocator\Api\ShopRepositoryInterface;
+use Elogic\StoreLocator\Model\ResourceModel\ShopCollections\Collection;
+use Elogic\StoreLocator\Model\ResourceModel\ShopCollections\CollectionFactory;
 use Elogic\StoreLocator\Model\ShopRepository;
+use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\View\Element\Template;
 
@@ -14,44 +17,46 @@ class Product extends Template
      * @var Template\Context
      */
     private $context;
+
     /**
-     * @var ShopProductsCollectionFactory
+     * @var \Magento\Catalog\Model\ProductFactory
      */
-    private $collectionFactory;
+    private $productLoader;
     /**
-     * @var ShopRepository
+     * @var ShopRepositoryInterface
      */
     private $shopRepository;
 
+
     /**
      * Product constructor.
-     * @param ShopProductsCollectionFactory $collectionFactory
-     * @param ShopRepository $shopRepository
+     * @param ShopRepositoryInterface $shopRepository
+     * @param ProductRepositoryInterface $productLoader
      * @param Template\Context $context
      * @param array $data
      */
-    public function __construct(ShopProductsCollectionFactory $collectionFactory, ShopRepository $shopRepository, Template\Context $context, array $data = [])
+    public function __construct(ShopRepositoryInterface $shopRepository, ProductRepositoryInterface $productLoader, Template\Context $context, array $data = [])
     {
         parent::__construct($context, $data);
         $this->context = $context;
-        $this->collectionFactory = $collectionFactory;
+        $this->productLoader = $productLoader;
         $this->shopRepository = $shopRepository;
     }
 
+    /**
+     * @throws NoSuchEntityException
+     */
     public function getShopsSoldProduct(): array
     {
         $productId = $this->context->getRequest()->getParam('id');
-
-        $productsCollection = $this->collectionFactory->create()->addFieldToFilter('product_id', $productId)->load();
+        $currentProduct = $this->productLoader->getById($productId);
+        $shopIds[] = mb_split(',', $currentProduct->getCustomAttribute('select_shop')->getValue());
 
         $shops = [];
-        foreach ($productsCollection as $product) {
-            try {
-                $shops[] = $this->shopRepository->getShopById(intval($product->getShopId()));
-            } catch (NoSuchEntityException $e) {
-                var_dump($e);
-            }
+        foreach ($shopIds as $id) {
+            $shops[] = $this->shopRepository->getShopById(intval($id));
         }
+
         return $shops;
     }
 }

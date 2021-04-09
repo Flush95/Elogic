@@ -18,6 +18,7 @@
     <preference for="Elogic\StoreLocator\Api\Data\ShopInterface" type="Elogic\StoreLocator\Model\Shop"/>
 
     <preference for="Elogic\StoreLocator\Api\Data\ShopProductsInterface" type="Elogic\StoreLocator\Model\ShopProducts"/>
+    <preference for="Elogic\StoreLocator\Api\ShopProductsRepositoryInterface" type="Elogic\StoreLocator\Model\ShopProductsRepository"/>
 
 
     <virtualType name="Elogic\StoreLocator\Model\Image\ImageUpload" type="Elogic\StoreLocator\Model\Image\ImageUploader">

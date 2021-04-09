@@ -15,7 +15,6 @@ use Magento\MediaStorage\Model\File\UploaderFactory;
 use Magento\Store\Model\StoreManagerInterface;
 use Psr\Log\LoggerInterface;
 
-
 class ImageUploader
 {
     /**
@@ -187,11 +186,9 @@ class ImageUploader
 
         $result['tmp_name'] = str_replace('\\', '/', $result['tmp_name']);
         $result['path'] = str_replace('\\', '/', $result['path']);
-        $result['url'] = $this->storeManager
-                ->getStore()
-                ->getBaseUrl(
-                    UrlInterface::URL_TYPE_MEDIA
-                ) . $this->getFilePath($baseTmpPath, $result['file']);
+        $result['url'] = $this->storeManager->getStore()
+                ->getBaseUrl(UrlInterface::URL_TYPE_MEDIA) . $this->getFilePath($baseTmpPath, $result['file']);
+
         $result['name'] = $result['file'];
         if (isset($result['file'])) {
             try {

@@ -2,9 +2,10 @@
 declare(strict_types=1);
 namespace Elogic\StoreLocator\Controller\Adminhtml\Post;
 
-use Elogic\StoreLocator\Model\ShopRepository;
+use Elogic\StoreLocator\Api\ShopRepositoryInterface;
 use Exception;
 use Magento\Backend\App\Action;
+use Magento\Backend\App\Action\Context;
 use Magento\Framework\App\Action\HttpGetActionInterface;
 use Magento\Framework\App\ResponseInterface;
 use Magento\Framework\Controller\Result\Redirect;
@@ -12,6 +13,21 @@ use Magento\Framework\Controller\ResultInterface;
 
 class Delete extends Action implements HttpGetActionInterface
 {
+    /**
+     * @var ShopRepositoryInterface
+     */
+    private $shopRepository;
+
+    /**
+     * Delete constructor.
+     * @param Context $context
+     * @param ShopRepositoryInterface $shopRepository
+     */
+    public function __construct(Context $context, ShopRepositoryInterface $shopRepository)
+    {
+        parent::__construct($context);
+        $this->shopRepository = $shopRepository;
+    }
 
     /**
      * @return ResponseInterface|Redirect|ResultInterface
@@ -21,8 +37,7 @@ class Delete extends Action implements HttpGetActionInterface
         $id = $this->getRequest()->getParam('shop_id');
         $resultRedirect = $this->resultRedirectFactory->create();
         if ($id) {
-            /** @var ShopRepository $model */
-            $model = $this->_objectManager->create(ShopRepository::class);
+            $model = $this->shopRepository;
             try {
                 $model->deleteShopById(intval($id));
                 $this->messageManager->addSuccessMessage(__('You deleted shop.'));
