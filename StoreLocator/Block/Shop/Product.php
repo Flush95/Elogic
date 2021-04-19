@@ -50,8 +50,10 @@ class Product extends Template
     {
         $productId = $this->context->getRequest()->getParam('id');
         $currentProduct = $this->productLoader->getById($productId);
-        $shopIds[] = mb_split(',', $currentProduct->getCustomAttribute('select_shop')->getValue());
-
+        $shopIds = [];
+        if (!is_null($currentProduct->getCustomAttribute('select_shop'))) {
+            $shopIds[] = mb_split(',', $currentProduct->getCustomAttribute('select_shop')->getValue());
+        }
         $shops = [];
         foreach ($shopIds as $id) {
             $shops[] = $this->shopRepository->getShopById(intval($id));

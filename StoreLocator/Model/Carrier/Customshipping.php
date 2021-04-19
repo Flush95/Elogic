@@ -1,0 +1,156 @@
+<?php
+
+namespace Elogic\StoreLocator\Model\Carrier;
+
+use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\Quote\Model\Quote\Address\RateRequest;
+use Magento\Shipping\Model\Carrier\AbstractCarrier;
+use Magento\Shipping\Model\Carrier\CarrierInterface;
+
+/**
+ * Custom shipping model
+ */
+class Customshipping extends AbstractCarrier implements CarrierInterface
+{
+    /**
+     * @var string
+     */
+    protected $_code = 'customshipping';
+
+    /**
+     * @var bool
+     */
+    protected $_isFixed = true;
+
+    /**
+     * @var \Magento\Shipping\Model\Rate\ResultFactory
+     */
+    private $rateResultFactory;
+
+    /**
+     * @var \Magento\Quote\Model\Quote\Address\RateResult\MethodFactory
+     */
+    private $rateMethodFactory;
+    /**
+     * @var ProductRepositoryInterface
+     */
+    private $productLoader;
+
+    private $shops = [];
+
+    /**
+     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
+     * @param \Magento\Quote\Model\Quote\Address\RateResult\ErrorFactory $rateErrorFactory
+     * @param \Psr\Log\LoggerInterface $logger
+     * @param \Magento\Shipping\Model\Rate\ResultFactory $rateResultFactory
+     * @param \Magento\Quote\Model\Quote\Address\RateResult\MethodFactory $rateMethodFactory
+     * @param array $data
+     */
+    public function __construct(
+        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
+        \Magento\Quote\Model\Quote\Address\RateResult\ErrorFactory $rateErrorFactory,
+        \Psr\Log\LoggerInterface $logger,
+        \Magento\Shipping\Model\Rate\ResultFactory $rateResultFactory,
+        \Magento\Quote\Model\Quote\Address\RateResult\MethodFactory $rateMethodFactory,
+        ProductRepositoryInterface $productLoader,
+        array $data = []
+    ) {
+        parent::__construct($scopeConfig, $rateErrorFactory, $logger, $data);
+
+        $this->rateResultFactory = $rateResultFactory;
+        $this->rateMethodFactory = $rateMethodFactory;
+        $this->productLoader = $productLoader;
+    }
+
+    /**
+     * Custom Shipping Rates Collector
+     *
+     * @param RateRequest $request
+     * @return \Magento\Shipping\Model\Rate\Result|bool
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     */
+    public function collectRates(RateRequest $request)
+    {
+        if (!$this->getConfigFlag('active')) {
+            return false;
+        }
+
+        /** @var \Magento\Shipping\Model\Rate\Result $result */
+        $result = $this->rateResultFactory->create();
+
+        foreach ($request->getAllItems() as $item) {
+            $method = $this->getMethod($item);
+            if (!$method->getCarrierTitle()) {
+                $result->reset();
+                break;
+            }
+            $result->append($method);
+        }
+
+        if (!$this->checkShops($this->shops)) {
+            $result->reset();
+        }
+
+        return $result;
+    }
+
+    /**
+     * @param $item
+     * @return \Magento\Quote\Model\Quote\Address\RateResult\Method
+     */
+    public function getMethod($item): \Magento\Quote\Model\Quote\Address\RateResult\Method
+    {
+        /** @var \Magento\Quote\Model\Quote\Address\RateResult\Method $method */
+        $method = $this->rateMethodFactory->create();
+
+        $shopName = $this->getProductShopAttribute($item);
+
+        $this->shops[] = $shopName;
+
+        $method->setCarrier($this->_code);
+        $method->setCarrierTitle($shopName);
+
+        $method->setMethod($item->getName());
+        $method->setMethodTitle($this->getConfigData('title'));
+
+        return $method;
+    }
+
+    /**
+     * @return array
+     */
+    public function getAllowedMethods(): array
+    {
+        return [$this->_code => $this->getConfigData('name')];
+    }
+
+    /**
+     * @param $item
+     * @return mixed
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     */
+    private function getProductShopAttribute($item)
+    {
+        $_product = $item->getProduct();
+        $pid = $_product->getId();
+        $product = $this->productLoader->getById($pid);
+        return $product->getAttributeText('select_shop');
+    }
+
+    /**
+     * @param array $shops
+     * @return bool
+     */
+    public function checkShops(array $shops): bool
+    {
+        $count = 0;
+        $needle = $shops[0];
+        foreach ($shops as $shop) {
+            if ($shop == $needle) {
+                $count++;
+            }
+        }
+
+        return $count == count($shops);
+    }
+}

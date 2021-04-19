@@ -11,5 +11,15 @@
                 <enable>1</enable>
             </general>
         </admin_config_module_status>
+
+        <carriers>
+            <customshipping>
+                <active>0</active>
+                <title>Custom Shipping Title</title>
+                <name>Method Name</name>
+                <sort_order>15</sort_order>
+                <model>Elogic\StoreLocator\Model\Carrier\Customshipping</model>
+            </customshipping>
+        </carriers>
     </default>
 </config>
