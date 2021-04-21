@@ -36,7 +36,7 @@ class AddSelectShopAttribute implements DataPatchInterface
         try {
             $eavSetup->addAttribute(
                 \Magento\Catalog\Model\Product::ENTITY,
-                'select_shop',
+                'product_shops',
                 [
                     'type' => 'text',
                     'backend' => 'Magento\Eav\Model\Entity\Attribute\Backend\ArrayBackend',

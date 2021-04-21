@@ -4,9 +4,6 @@ declare(strict_types=1);
 namespace Elogic\StoreLocator\Block\Shop;
 
 use Elogic\StoreLocator\Api\ShopRepositoryInterface;
-use Elogic\StoreLocator\Model\ResourceModel\ShopCollections\Collection;
-use Elogic\StoreLocator\Model\ResourceModel\ShopCollections\CollectionFactory;
-use Elogic\StoreLocator\Model\ShopRepository;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\View\Element\Template;
@@ -26,7 +23,6 @@ class Product extends Template
      * @var ShopRepositoryInterface
      */
     private $shopRepository;
-
 
     /**
      * Product constructor.
@@ -50,11 +46,13 @@ class Product extends Template
     {
         $productId = $this->context->getRequest()->getParam('id');
         $currentProduct = $this->productLoader->getById($productId);
+
         $shopIds = [];
-        if (!is_null($currentProduct->getCustomAttribute('select_shop'))) {
-            $shopIds[] = mb_split(',', $currentProduct->getCustomAttribute('select_shop')->getValue());
+        if (!is_null($currentProduct->getCustomAttribute('product_shops'))) {
+            $shopIds = mb_split(',', $currentProduct->getCustomAttribute('product_shops')->getValue());
         }
         $shops = [];
+
         foreach ($shopIds as $id) {
             $shops[] = $this->shopRepository->getShopById(intval($id));
         }

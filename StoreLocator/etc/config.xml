@@ -16,7 +16,7 @@
             <customshipping>
                 <active>0</active>
                 <title>Custom Shipping Title</title>
-                <name>Method Name</name>
+                <shipping_cost>0</shipping_cost>
                 <sort_order>15</sort_order>
                 <model>Elogic\StoreLocator\Model\Carrier\Customshipping</model>
             </customshipping>

@@ -2,6 +2,7 @@
 
 namespace Elogic\StoreLocator\Model\Carrier;
 
+use Elogic\StoreLocator\Api\ShopRepositoryInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Quote\Model\Quote\Address\RateRequest;
 use Magento\Shipping\Model\Carrier\AbstractCarrier;
@@ -36,7 +37,11 @@ class Customshipping extends AbstractCarrier implements CarrierInterface
      */
     private $productLoader;
 
-    private $shops = [];
+    private $shopsIds = [];
+    /**
+     * @var ShopRepositoryInterface
+     */
+    private $shopRepository;
 
     /**
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
@@ -44,6 +49,8 @@ class Customshipping extends AbstractCarrier implements CarrierInterface
      * @param \Psr\Log\LoggerInterface $logger
      * @param \Magento\Shipping\Model\Rate\ResultFactory $rateResultFactory
      * @param \Magento\Quote\Model\Quote\Address\RateResult\MethodFactory $rateMethodFactory
+     * @param ProductRepositoryInterface $productLoader
+     * @param ShopRepositoryInterface $shopRepository
      * @param array $data
      */
     public function __construct(
@@ -53,13 +60,14 @@ class Customshipping extends AbstractCarrier implements CarrierInterface
         \Magento\Shipping\Model\Rate\ResultFactory $rateResultFactory,
         \Magento\Quote\Model\Quote\Address\RateResult\MethodFactory $rateMethodFactory,
         ProductRepositoryInterface $productLoader,
+        ShopRepositoryInterface $shopRepository,
         array $data = []
     ) {
         parent::__construct($scopeConfig, $rateErrorFactory, $logger, $data);
-
         $this->rateResultFactory = $rateResultFactory;
         $this->rateMethodFactory = $rateMethodFactory;
         $this->productLoader = $productLoader;
+        $this->shopRepository = $shopRepository;
     }
 
     /**
@@ -78,19 +86,14 @@ class Customshipping extends AbstractCarrier implements CarrierInterface
         /** @var \Magento\Shipping\Model\Rate\Result $result */
         $result = $this->rateResultFactory->create();
 
-        foreach ($request->getAllItems() as $item) {
-            $method = $this->getMethod($item);
-            if (!$method->getCarrierTitle()) {
-                $result->reset();
-                break;
-            }
+        $checkoutProducts = $request->getAllItems();
+        $shopsIds = $this->getShopIds($checkoutProducts);
+        $availableIds = $this->checkAvailablePickupStores($shopsIds, $checkoutProducts);
+
+        foreach ($this->loadShopNames($availableIds) as $shopName) {
+            $method = $this->getMethod($shopName);
             $result->append($method);
         }
-
-        if (!$this->checkShops($this->shops)) {
-            $result->reset();
-        }
-
         return $result;
     }
 
@@ -98,19 +101,14 @@ class Customshipping extends AbstractCarrier implements CarrierInterface
      * @param $item
      * @return \Magento\Quote\Model\Quote\Address\RateResult\Method
      */
-    public function getMethod($item): \Magento\Quote\Model\Quote\Address\RateResult\Method
+    public function getMethod($shopName): \Magento\Quote\Model\Quote\Address\RateResult\Method
     {
         /** @var \Magento\Quote\Model\Quote\Address\RateResult\Method $method */
         $method = $this->rateMethodFactory->create();
-
-        $shopName = $this->getProductShopAttribute($item);
-
-        $this->shops[] = $shopName;
-
         $method->setCarrier($this->_code);
         $method->setCarrierTitle($shopName);
 
-        $method->setMethod($item->getName());
+        $method->setMethod($shopName);
         $method->setMethodTitle($this->getConfigData('title'));
 
         return $method;
@@ -125,32 +123,54 @@ class Customshipping extends AbstractCarrier implements CarrierInterface
     }
 
     /**
-     * @param $item
-     * @return mixed
+     * @param array $allItems
+     * @return array
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
-    private function getProductShopAttribute($item)
+    private function getShopIds(array $allItems): array
     {
-        $_product = $item->getProduct();
-        $pid = $_product->getId();
-        $product = $this->productLoader->getById($pid);
-        return $product->getAttributeText('select_shop');
+        $shopIds = [];
+        foreach ($allItems as $item) {
+            $_product = $item->getProduct();
+            $pid = $_product->getId();
+            $product = $this->productLoader->getById($pid);
+            if ($product->getCustomAttribute('product_shops')) {
+                $shopIds = array_merge($shopIds, mb_split(',', $product->getCustomAttribute('product_shops')->getValue()));
+            }
+        }
+        return $shopIds;
     }
 
     /**
-     * @param array $shops
-     * @return bool
+     * @param $shopIds
+     * @param $allProducts
+     * @return array
      */
-    public function checkShops(array $shops): bool
+    public function checkAvailablePickupStores($shopIds, $allProducts): array
     {
-        $count = 0;
-        $needle = $shops[0];
-        foreach ($shops as $shop) {
-            if ($shop == $needle) {
-                $count++;
+        $availableIn = [];
+        $count = array_count_values($shopIds);
+
+        foreach ($count as $key => $value) {
+            if ($value == count($allProducts)) {
+                $availableIn[] = $key;
             }
         }
+        return $availableIn;
+    }
 
-        return $count == count($shops);
+    /**
+     * @param array $shopIds
+     * @return array
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     */
+    public function loadShopNames(array $shopIds): array
+    {
+        $shopNames = [];
+        foreach ($shopIds as $id) {
+            $shop = $this->shopRepository->getShopById(intval($id));
+            $shopNames[] = $shop->getShopName();
+        }
+        return $shopNames;
     }
 }
